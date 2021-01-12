@@ -1,7 +1,7 @@
 <form theme="dark">
-  <label>F5 BIG-IP Advanced WAF Insights</label>
+  <label>F5 BIG-IP System Metrics</label>
   <fieldset submitButton="false" autoRun="true">
-    <input type="time" token="time_token">
+    <input type="time" token="time_token" searchWhenChanged="true">
       <label>Time Range</label>
       <default>
         <earliest>-60m@m</earliest>
@@ -9,31 +9,68 @@
       </default>
     </input>
     <input type="dropdown" token="host_token" searchWhenChanged="true">
-      <label>BIP-IP Host(s)</label>
+      <label>BIG-IP Host(s)</label>
       <choice value="*">All</choice>
       <fieldForLabel>hostname</fieldForLabel>
       <fieldForValue>hostname</fieldForValue>
       <search>
         <query>index="f5_index" sourcetype="f5:telemetry:json" source="f5:bigip:avr" | table hostname | dedup hostname</query>
-        <earliest>-24h@h</earliest>
+        <earliest>-30d@d</earliest>
         <latest>now</latest>
       </search>
       <default>*</default>
     </input>
+    <input type="dropdown" token="interface_token" searchWhenChanged="true">
+      <label>Interface(s)</label>
+      <choice value="*">All</choice>
+      <fieldForLabel>Interface</fieldForLabel>
+      <fieldForValue>Interface</fieldForValue>
+      <search>
+        <query>index="f5_index" source="f5:bigip:avr" hostname="$host_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") (interface_name="1.*" OR intferface_name="2.*" OR interface_name="mgmt") | rename interface_name as Interface | table Interface | dedup Interface</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <initialValue>1.1</initialValue>
+    </input>
   </fieldset>
   <row>
     <panel>
-      <title>Attack Summary</title>
+      <title>System Details</title>
+      <table>
+        <search>
+          <query>index="f5_index" sourcetype="f5:telemetry:json" source="f5:bigip:system" host="$host_token$" | rename host as Host, system.version as Build, system.licenseReady as Licensed?, system.marketingName as Platform, system.syncMode as Mode, system.failoverStatus as Status, system.provisioning.ltm.level as LTM, system.provisioning.gtm.level as DNS, system.provisioning.afm.level as AFM, system.provisioning.apm.level as APM, system.provisioning.asm.level as ASM, system.provisioning.avr.level as AVR | table Host, Status, Build, Licensed?, Platform, Mode, LTM, ASM, APM, AVR, AFM, DNS | dedup Host</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">row</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3D%22f5_index%22%20sourcetype%3D%22f5%3Atelemetry%3Ajson%22%20source%3D%22f5%3Abigip%3Asystem%22%20host%3D%22$host_token$%22&amp;earliest=$time_token.earliest$&amp;latest=$time_token.latest$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>BIG-IP CPU % Over Time</title>
       <chart>
         <search>
-          <query>index="f5_index" source="f5:bigip:asm" attack_type=* request_status="blocked" hostname="$host_token$"| rename request_status as Status, hostname as Host, attack_type as Attack_Type | chart count(Status) by Attack_Type Host | sort Status</query>
+          <query>index="f5_index" source="f5:bigip:avr" Entity="SystemMonitor" hostname="$host_token$" | eval CPU% = MaxCpu/100 | timechart span=1h max(CPU%) by hostname</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">CPU Percentage</option>
         <option name="charting.axisTitleY.visibility">visible</option>
         <option name="charting.axisTitleY2.visibility">visible</option>
         <option name="charting.axisX.abbreviation">none</option>
@@ -43,7 +80,7 @@
         <option name="charting.axisY2.abbreviation">none</option>
         <option name="charting.axisY2.enabled">0</option>
         <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
+        <option name="charting.chart">line</option>
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
@@ -57,71 +94,216 @@
         <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
         <option name="charting.legend.mode">standard</option>
-        <option name="charting.legend.placement">right</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.seriesColors">[0x0066ff,0xff33cc,0x33ff99]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Control Plane CPU(%) per Core</title>
+      <chart>
+        <search>
+          <query>index="f5_index" source="f5:bigip:avr" Entity="CpuStat" hostname="$host_token$"  | eval CPU_Usage_per_CPU_ID = system/100 | timechart span=1h max(CPU_Usage_per_CPU_ID) by cpu_id</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">CPU Utilization</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
         <option name="charting.lineWidth">2</option>
         <option name="refresh.display">progressbar</option>
         <option name="trellis.enabled">0</option>
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
-        <option name="trellis.splitBy">_aggregation</option>
       </chart>
-    </panel>
-    <panel>
-      <title>Attacks by Country</title>
-      <map>
-        <search>
-          <query>index="f5_index" source="f5:bigip:asm" attack_type=* hostname="$host_token$" | rename reqyest_status as Status, hostname as Host, attack_type as Attack_Type, ip_client as clientip | iplocation clientip | stats count by Country | sort Country | geom geo_countries allFeatures=True featureIdField=Country</query>
-          <earliest>$time_token.earliest$</earliest>
-          <latest>$time_token.latest$</latest>
-          <sampleRatio>1</sampleRatio>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="mapping.choroplethLayer.colorBins">5</option>
-        <option name="mapping.choroplethLayer.colorMode">categorical</option>
-        <option name="mapping.choroplethLayer.maximumColor">0xaf575a</option>
-        <option name="mapping.choroplethLayer.minimumColor">0x62b3b2</option>
-        <option name="mapping.choroplethLayer.neutralPoint">0</option>
-        <option name="mapping.choroplethLayer.shapeOpacity">0.75</option>
-        <option name="mapping.choroplethLayer.showBorder">1</option>
-        <option name="mapping.data.maxClusters">100</option>
-        <option name="mapping.legend.placement">bottomright</option>
-        <option name="mapping.map.center">(44.21,-22.76)</option>
-        <option name="mapping.map.panning">1</option>
-        <option name="mapping.map.scrollZoom">0</option>
-        <option name="mapping.map.zoom">2</option>
-        <option name="mapping.markerLayer.markerMaxSize">50</option>
-        <option name="mapping.markerLayer.markerMinSize">10</option>
-        <option name="mapping.markerLayer.markerOpacity">0.8</option>
-        <option name="mapping.showTiles">1</option>
-        <option name="mapping.tileLayer.maxZoom">7</option>
-        <option name="mapping.tileLayer.minZoom">0</option>
-        <option name="mapping.tileLayer.tileOpacity">1</option>
-        <option name="mapping.type">choropleth</option>
-        <option name="refresh.display">progressbar</option>
-        <option name="trellis.enabled">0</option>
-        <option name="trellis.scales.shared">1</option>
-        <option name="trellis.size">medium</option>
-      </map>
     </panel>
   </row>
   <row>
     <panel>
-      <title>Recent Violations</title>
-      <table>
+      <title>BIG-IP Memory Utlilzation (%)</title>
+      <chart>
         <search>
-          <query>index="f5_index" source="f5:bigip:asm" attack_type=* request_status="blocked" hostname="$host_token$" | rename ip_client as Client_IP, req_status as Request_Status, hostname as Host, attack_type as Attack_Type, violations as Violation, support_id as Support_ID | table Host, Support_ID, Request_Status, Attack_Type, Violation, Client_IP| head 100</query>
+          <query>index="f5_index" source="f5:bigip:avr" Entity="SystemMonitor" hostname="$host_token$" | eval Memory% = MaxMemory/100 | timechart span=1h max(Memory%) by hostname</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
-        <option name="count">20</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
-        <option name="percentagesRow">false</option>
-        <option name="rowNumbers">false</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
-      </table>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Memory Usage (%)</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"Memory%":#66FF00}</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.seriesColors">[000cc00,0xF87217,0x0000FF]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Network Interface Metrics.    -      $interface_token$ interface</title>
+      <chart>
+        <search>
+          <query>index="f5_index" source="f5:bigip:avr" hostname="$host_token$" interface_name="$interface_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") | eval Dropped_Packets = counters_drops_in + counters_drops_out, Packet_Errors = counters_errors_in + counters_errors_out, Packets_In = counters_pkts_in, Packets_Out = counters_pkts_out | timechart span=1h max(Packets_In) as Packets_In, max(Packets_Out) as Packets_Out by hostname</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Packets</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.seriesColors">[0xff9900,0x9900ff,0xffff1a]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Transactions per Second (TPS)</title>
+      <chart>
+        <search>
+          <query>index="f5_index" sourcetype="f5:telemetry:json" source="f5:bigip:avr" transactions&gt;= 0 (pool_name=* OR Entity='DeviceTraffic') |rename transactions as Transactions_Per_Second | timechart max(Transactions_Per_Second) by pool_name</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">TPS</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Bytes In &amp; Bytes out</title>
+      <chart>
+        <search>
+          <query>| from datamodel: "Network_Traffic" | where host="$host_token$" | eval KBsOut = bytes_out/1024, KBsIn = bytes_in/1024 | timechart max(KBsOut), max(KBsIn) by host</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Bytes</option>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
     </panel>
   </row>
 </form>

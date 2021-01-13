@@ -1,4 +1,4 @@
-<form theme="dark">
+<form theme="light">
   <label>F5 BIG-IP System Metrics</label>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="time_token" searchWhenChanged="true">

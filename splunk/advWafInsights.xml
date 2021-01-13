@@ -4,7 +4,7 @@
     <input type="time" token="time_token" searchWhenChanged="true">
       <label>Time Range</label>
       <default>
-        <earliest>-60m@m</earliest>
+        <earliest>-24h@h</earliest>
         <latest>now</latest>
       </default>
     </input>
@@ -15,7 +15,7 @@
       <fieldForValue>hostname</fieldForValue>
       <search>
         <query>index="f5_index" sourcetype="f5:telemetry:json" source="f5:bigip:avr" | table hostname | dedup hostname</query>
-        <earliest>-30d@d</earliest>
+        <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
       <default>*</default>

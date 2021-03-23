@@ -290,7 +290,7 @@
       <title>Bytes In &amp; Bytes out</title>
       <chart>
         <search>
-          <query>| from datamodel: "Network_Traffic" | where host="bigip.prem.aserracorp.com" | eval KBsOut = bytes_out/1024, KBsIn = bytes_in/1024 | timechart max(KBsOut), max(KBsIn) by pool_name</query>
+          <query>| from datamodel: "Network_Traffic" | where host=* | eval KBsOut = bytes_out/1024, KBsIn = bytes_in/1024 | timechart max(KBsOut), max(KBsIn) by pool_name</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>

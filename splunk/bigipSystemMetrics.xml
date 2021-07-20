@@ -14,7 +14,7 @@
       <fieldForLabel>hostname</fieldForLabel>
       <fieldForValue>hostname</fieldForValue>
       <search>
-        <query>index="f5_index" sourcetype="f5:telemetry:json" source="f5:bigip:avr" | table hostname | dedup hostname</query>
+        <query>sourcetype="f5:telemetry:json" source="f5:bigip:avr" | table hostname | dedup hostname</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
@@ -26,7 +26,7 @@
       <fieldForLabel>Interface</fieldForLabel>
       <fieldForValue>Interface</fieldForValue>
       <search>
-        <query>index="f5_index" source="f5:bigip:avr" hostname="$host_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") (interface_name="1.*" OR intferface_name="2.*" OR interface_name="mgmt") | rename interface_name as Interface | table Interface | dedup Interface</query>
+        <query>source="f5:bigip:avr" hostname="$host_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") (interface_name="1.*" OR intferface_name="2.*" OR interface_name="mgmt") | rename interface_name as Interface | table Interface | dedup Interface</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
@@ -38,7 +38,7 @@
       <title>System Details</title>
       <table>
         <search>
-          <query>index="f5_index" sourcetype="f5:telemetry:json" source="f5:bigip:system" host="$host_token$" | rename host as Host, system.version as Build, system.licenseReady as Licensed?, system.marketingName as Platform, system.syncMode as Mode, system.failoverStatus as Status, system.provisioning.ltm.level as LTM, system.provisioning.gtm.level as DNS, system.provisioning.afm.level as AFM, system.provisioning.apm.level as APM, system.provisioning.asm.level as ASM, system.provisioning.avr.level as AVR | table Host, Status, Build, Licensed?, Platform, Mode, LTM, ASM, APM, AVR, AFM, DNS | dedup Host</query>
+          <query>sourcetype="f5:telemetry:json" source="f5:bigip:system" host="$host_token$" | rename host as Host, system.version as Build, system.licenseReady as Licensed?, system.marketingName as Platform, system.syncMode as Mode, system.failoverStatus as Status, system.provisioning.ltm.level as LTM, system.provisioning.gtm.level as DNS, system.provisioning.afm.level as AFM, system.provisioning.apm.level as APM, system.provisioning.asm.level as ASM, system.provisioning.avr.level as AVR | table Host, Status, Build, Licensed?, Platform, Mode, LTM, ASM, APM, AVR, AFM, DNS | dedup Host</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -62,7 +62,7 @@
       <title>BIG-IP CPU % Over Time</title>
       <chart>
         <search>
-          <query>index="f5_index" source="f5:bigip:avr" Entity="SystemMonitor" hostname="$host_token$" | eval CPU% = MaxCpu/100 | timechart span=1h max(CPU%) by hostname</query>
+          <query>source="f5:bigip:avr" Entity="SystemMonitor" hostname="$host_token$" | eval CPU% = MaxCpu/100 | timechart span=1h max(CPU%) by hostname</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -107,7 +107,7 @@
       <title>Control Plane CPU(%) per Core</title>
       <chart>
         <search>
-          <query>index="f5_index" source="f5:bigip:avr" Entity="CpuStat" hostname="$host_token$"  | eval CPU_Usage_per_CPU_ID = system/100 | timechart span=1h max(CPU_Usage_per_CPU_ID) by cpu_id</query>
+          <query>source="f5:bigip:avr" Entity="CpuStat" hostname="$host_token$"  | eval CPU_Usage_per_CPU_ID = system/100 | timechart span=1h max(CPU_Usage_per_CPU_ID) by cpu_id</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -153,7 +153,7 @@
       <title>BIG-IP Memory Utlilzation (%)</title>
       <chart>
         <search>
-          <query>index="f5_index" source="f5:bigip:avr" Entity="SystemMonitor" hostname="$host_token$" | eval Memory% = MaxMemory/100 | timechart span=1h max(Memory%) by hostname</query>
+          <query>source="f5:bigip:avr" Entity="SystemMonitor" hostname="$host_token$" | eval Memory% = MaxMemory/100 | timechart span=1h max(Memory%) by hostname</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -199,7 +199,7 @@
       <title>Network Interface Metrics.    -      $interface_token$ interface</title>
       <chart>
         <search>
-          <query>index="f5_index" source="f5:bigip:avr" hostname="$host_token$" interface_name="$interface_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") | eval Dropped_Packets = counters_drops_in + counters_drops_out, Packet_Errors = counters_errors_in + counters_errors_out, Packets_In = counters_pkts_in, Packets_Out = counters_pkts_out | timechart span=1h max(Packets_In) as Packets_In, max(Packets_Out) as Packets_Out by hostname</query>
+          <query>source="f5:bigip:avr" hostname="$host_token$" interface_name="$interface_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") | eval Dropped_Packets = counters_drops_in + counters_drops_out, Packet_Errors = counters_errors_in + counters_errors_out, Packets_In = counters_pkts_in, Packets_Out = counters_pkts_out | timechart span=1h max(Packets_In) as Packets_In, max(Packets_Out) as Packets_Out by hostname</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -246,7 +246,7 @@
       <title>Transactions per Second (TPS)</title>
       <chart>
         <search>
-          <query>index="f5_index" sourcetype="f5:telemetry:json" source="f5:bigip:avr" transactions&gt;= 0 (pool_name=* OR Entity='DeviceTraffic') |rename transactions as Transactions_Per_Second | timechart max(Transactions_Per_Second) by pool_name</query>
+          <query>sourcetype="f5:telemetry:json" source="f5:bigip:avr" transactions&gt;= 0 (pool_name=* OR Entity='DeviceTraffic') |rename transactions as Transactions_Per_Second | timechart max(Transactions_Per_Second) by pool_name</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>

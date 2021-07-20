@@ -14,7 +14,7 @@
       <fieldForLabel>hostname</fieldForLabel>
       <fieldForValue>hostname</fieldForValue>
       <search>
-        <query>index="f5_index" sourcetype="f5:telemetry:json" source="f5:bigip:avr" | table hostname | dedup hostname</query>
+        <query>sourcetype="f5:telemetry:json" source="f5:bigip:avr" | table hostname | dedup hostname</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
@@ -26,7 +26,7 @@
       <title>Attack Summary</title>
       <chart>
         <search>
-          <query>index="f5_index" source="f5:bigip:asm" attack_type=* request_status="blocked" hostname="$host_token$"| rename request_status as Status, hostname as Host, attack_type as Attack_Type | chart count(Status) by Attack_Type Host | sort Status</query>
+          <query>source="f5:bigip:asm" attack_type=* request_status="blocked" hostname="$host_token$"| rename request_status as Status, hostname as Host, attack_type as Attack_Type | chart count(Status) by Attack_Type Host | sort Status</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -70,7 +70,7 @@
       <title>Attacks by Country</title>
       <map>
         <search>
-          <query>index="f5_index" source="f5:bigip:asm" attack_type=* hostname="$host_token$" | rename reqyest_status as Status, hostname as Host, attack_type as Attack_Type, ip_client as clientip | iplocation clientip | stats count by Country | sort Country | geom geo_countries allFeatures=True featureIdField=Country</query>
+          <query>source="f5:bigip:asm" attack_type=* hostname="$host_token$" | rename reqyest_status as Status, hostname as Host, attack_type as Attack_Type, ip_client as clientip | iplocation clientip | stats count by Country | sort Country | geom geo_countries allFeatures=True featureIdField=Country</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -109,7 +109,7 @@
       <title>Recent Violations</title>
       <table>
         <search>
-          <query>index="f5_index" source="f5:bigip:asm" attack_type=* request_status="blocked" hostname="$host_token$" | rename ip_client as Client_IP, req_status as Request_Status, hostname as Host, attack_type as Attack_Type, violations as Violation, support_id as Support_ID | table Host, Support_ID, Request_Status, Attack_Type, Violation, Client_IP| head 100</query>
+          <query>source="f5:bigip:asm" attack_type=* request_status="blocked" hostname="$host_token$" | rename ip_client as Client_IP, req_status as Request_Status, hostname as Host, attack_type as Attack_Type, violations as Violation, support_id as Support_ID | table Host, Support_ID, Request_Status, Attack_Type, Violation, Client_IP| head 100</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>

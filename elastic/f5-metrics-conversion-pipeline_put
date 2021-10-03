@@ -1,0 +1,62 @@
+PUT _ingest/pipeline/f5-metrics-pipeline
+{
+  "description": "My optional pipeline description",
+  "processors": [
+    {
+        "convert": {
+          "field": "MaxCpu",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "AvgMemory",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "counters_drops_in",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "counters_drops_out",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "counters_errors_out",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "counters_errors_in",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "counters_pkts_in",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "counters_pkts_out",
+          "type": "double",
+          "ignore_missing": true
+        }
+      }
+  ]
+}

@@ -3,57 +3,64 @@ PUT _ingest/pipeline/f5-metrics-pipeline
   "description": "My optional pipeline description",
   "processors": [
     {
+      "convert": {
+          "field": "clientside.bitsIn",
+          "type": "double",
+          "ignore_missing": true
+        }
+    },
+    {
+      "convert": {
+        "field": "clientside.bitsOut",
+        "type": "double",
+        "ignore_missing": true
+        }
+      },
+      {
         "convert": {
-          "field": "MaxCpu",
+          "field": "clientside.pktsIn",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "AvgMemory",
+          "field": "clientside.pktsOut",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "counters_drops_in",
+          "field": "clientside.curConns",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "counters_drops_out",
+          "field": "AvgConcurrentConnections",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "counters_errors_out",
+          "field": "MemoryHealth",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "counters_errors_in",
+          "field": "CpuHealth",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "counters_pkts_in",
-          "type": "double",
-          "ignore_missing": true
-        }
-      },
-      {
-        "convert": {
-          "field": "counters_pkts_out",
+          "field": "AvgThroughput",
           "type": "double",
           "ignore_missing": true
         }

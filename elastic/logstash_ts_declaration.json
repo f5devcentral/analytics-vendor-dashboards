@@ -7,31 +7,8 @@
 			"actions": [{
 				"includeData": {},
                 "locations": {
-                    "pools": {
-                        "/Common/portal.app/*": {
-                            "availabilityState": true,
-                            "activeMemberCnt": true,
-                            "members": {
-                                ".*": {
-                                    "addr": true,
-                                    "monitorStatus": true
-                                }
-                            }
-                        }
-                    },
-                    "virtualServers": {
-                        "/Common/portal.app/*": {
-                            "availabilityState": true,
-                            "clientside.bitsIn": true,
-                            "clientside.bitsOut": true,
-                            "clientside.pktsIn": true,
-                            "clientside.pktsOut": true,
-                            "clientside.curConns": true,
-                            "name": true,
-                            "pool": true
-                        }
-                    }
-                    }
+                    "system": true
+                }
             }]
 		}
 	},
@@ -42,12 +19,23 @@
 				"includeData": {},
                 "locations": {
                     "Entity": {
-                        "SystemMonitor": true
+                        "*": true
                     },
-                    "AvgConcurrentConnections": true,
-                    "MemoryHealth": true,
-                    "CpuHealth": true,
-                    "AvgThroughput": true
+                    "hostname": true,
+                    "AvgThroughput": true,
+                    "MaxCpu": true,
+                    "AvgMemory": true,
+                    "transactions": true,
+                    "pool_name": true,
+                    "counters_pkts_in": true,
+                    "counters_pkts_out": true,
+                    "server_concurrent_conns": true,
+                    "client_concurrent_conns": true,
+                    "latency": true,
+                    "RTTMin": true,
+                    "RTTMax": true
+
+
                 }
             }
             ]

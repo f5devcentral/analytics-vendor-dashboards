@@ -2,68 +2,82 @@ PUT _ingest/pipeline/f5-metrics-pipeline
 {
   "description": "My optional pipeline description",
   "processors": [
-    {
-      "convert": {
-          "field": "clientside.bitsIn",
-          "type": "double",
-          "ignore_missing": true
-        }
-    },
-    {
-      "convert": {
-        "field": "clientside.bitsOut",
-        "type": "double",
-        "ignore_missing": true
-        }
-      },
       {
         "convert": {
-          "field": "clientside.pktsIn",
+          "field": "MaxCpu",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "clientside.pktsOut",
+          "field": "AvgMemory",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "clientside.curConns",
+          "field": "counters_pkts_in",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "AvgConcurrentConnections",
+          "field": "counters_pkts_out",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "rename": {
+          "field": "system.hostname",
+          "target_field": "hostname",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "transactions",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "MemoryHealth",
+          "field": "server_concurrent_conns",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "CpuHealth",
+          "field": "client_concurrent_conns",
           "type": "double",
           "ignore_missing": true
         }
       },
       {
         "convert": {
-          "field": "AvgThroughput",
+          "field": "latency",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "RTTMin",
+          "type": "double",
+          "ignore_missing": true
+        }
+      },
+      {
+        "convert": {
+          "field": "RTTMax",
           "type": "double",
           "ignore_missing": true
         }
       }
-  ]
+    ]
 }

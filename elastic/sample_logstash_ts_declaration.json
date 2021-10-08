@@ -33,9 +33,15 @@
                     "client_concurrent_conns": true,
                     "latency": true,
                     "RTTMin": true,
-                    "RTTMax": true
-
-
+                    "RTTMax": true,
+                    "violations": true,
+                    "attack_type": true,
+                    "severity": true,
+                    "request_status": true,
+                    "support_id": true,
+                    "ip_client": true,
+                    "geo_location": true,
+                    "date_time": true
                 }
             }
             ]

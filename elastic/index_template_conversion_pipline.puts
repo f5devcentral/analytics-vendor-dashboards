@@ -1,3 +1,6 @@
+#
+# Create f5 metrics conversion pipeline
+#
 PUT _ingest/pipeline/f5-metrics-pipeline
 {
   "description": "My optional pipeline description",
@@ -80,4 +83,27 @@ PUT _ingest/pipeline/f5-metrics-pipeline
         }
       }
     ]
+}
+
+#
+# Creates a component template for index settings
+#
+PUT /_component_template/f5-logs-settings?pretty
+{
+  "template": {
+    "settings": {
+      "index.default_pipeline": "f5-metrics-pipeline",
+      "index.lifecycle.name": "logs"
+    }
+  }
+}
+
+#
+# Creates an index template matching `f6-*`
+#
+PUT /_index_template/f5-logs-template?pretty
+{
+  "index_patterns": ["f5-*"],
+  "priority": 500,
+  "composed_of": ["f5-logs-settings"]
 }

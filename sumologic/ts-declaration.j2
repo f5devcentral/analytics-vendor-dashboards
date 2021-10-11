@@ -1,0 +1,52 @@
+{
+    "class": "Telemetry",
+    "TS_System": {
+        "class": "Telemetry_System",
+        "systemPoller": {
+            "interval": 60
+            "enable": true,
+            "trace": false,
+            "actions": [
+                {
+                    "setTag": {
+                        "tenant": "`T`",
+                        "application": "`A`"
+                    },
+                    "enable": true
+                }
+            ]
+        },
+        "enable": true,
+        "trace": false,
+        "host": "localhost",
+        "port": {{ ts_poller_port }},  
+        "protocol": "http"
+        }
+    },
+    "TS_Listener": {
+        "class": "Telemetry_Listener",
+        "port": {{ ts_listener_port }}
+    },
+    "Poller":{ 
+       "class":"Telemetry_System_Poller",
+       "interval":60,
+       "enable":true,
+       "trace":false,
+       "allowSelfSignedCert":false,
+       "host":"localhost",
+       "port": {{ ts_poller_port }}
+       "protocol":"http"
+    },
+    "SumoLogic_Consumer": {
+        "class": "Telemetry_Consumer",
+        "type": "Sumo_Logic",
+        "host": "{{ sumo_collector_fqdn }}",
+        "protocol": "https",
+        "port": 443, 
+        "enable": true,
+        "trace": false,
+        "path": "/receiver/v1/http/",
+        "passphrase": {
+            "cipherText": "{{ sumo_collector_encryption }}"
+    }
+}

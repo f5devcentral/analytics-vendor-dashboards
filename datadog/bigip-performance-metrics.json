@@ -1,0 +1,397 @@
+{
+	"title": "F5 BIG-IP System Metrics",
+	"description": "## Title\n\nDescribe this dashboard. Add links to other dashboards, monitors, wikis,  and docs to help your teammates. Markdown is supported.\n\n- [This might link to a dashboard](#)\n- [This might link to a wiki](#)",
+	"widgets": [{
+		"id": 4204081513123088,
+		"definition": {
+			"title": "CPU (%)",
+			"title_size": "16",
+			"title_align": "left",
+			"type": "query_value",
+			"requests": [{
+				"formulas": [{
+					"formula": "query1 / 100"
+				}],
+				"conditional_formats": [{
+					"comparator": ">",
+					"palette": "white_on_red",
+					"value": 80
+				}, {
+					"comparator": ">=",
+					"palette": "white_on_yellow",
+					"value": 59.5
+				}, {
+					"comparator": "<",
+					"palette": "white_on_green",
+					"value": 59.5
+				}],
+				"response_format": "scalar",
+				"queries": [{
+					"query": "avg:MaxCpu{$hostname}",
+					"data_source": "metrics",
+					"name": "query1",
+					"aggregator": "last"
+				}]
+			}],
+			"autoscale": true,
+			"precision": 0
+		},
+		"layout": {
+			"x": 0,
+			"y": 0,
+			"width": 1,
+			"height": 3
+		}
+	}, {
+		"id": 7896552458640930,
+		"definition": {
+			"title": "BIG-IP CPU % Over Time",
+			"title_size": "16",
+			"title_align": "left",
+			"show_legend": true,
+			"legend_layout": "vertical",
+			"legend_columns": ["avg", "min", "max"],
+			"type": "timeseries",
+			"requests": [{
+				"formulas": [{
+					"alias": "CPU(%)",
+					"formula": "query1 / 100"
+				}],
+				"response_format": "timeseries",
+				"on_right_yaxis": false,
+				"queries": [{
+					"query": "avg:MaxCpu{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query1"
+				}],
+				"style": {
+					"palette": "dog_classic"
+				},
+				"display_type": "line"
+			}],
+			"yaxis": {
+				"include_zero": false,
+				"min": "0",
+				"max": "100"
+			},
+			"markers": []
+		},
+		"layout": {
+			"x": 1,
+			"y": 0,
+			"width": 5,
+			"height": 3
+		}
+	}, {
+		"id": 5887959585688510,
+		"definition": {
+			"title": "Memory (%)",
+			"title_size": "16",
+			"title_align": "left",
+			"type": "query_value",
+			"requests": [{
+				"formulas": [{
+					"formula": "query1 / 100"
+				}],
+				"conditional_formats": [{
+					"comparator": ">",
+					"palette": "white_on_red",
+					"value": 80
+				}, {
+					"comparator": ">=",
+					"palette": "white_on_yellow",
+					"value": 59.5
+				}, {
+					"comparator": "<",
+					"palette": "white_on_green",
+					"value": 59.5
+				}],
+				"response_format": "scalar",
+				"queries": [{
+					"query": "avg:AvgMemory{$hostname}",
+					"data_source": "metrics",
+					"name": "query1",
+					"aggregator": "last"
+				}]
+			}],
+			"autoscale": true,
+			"precision": 0
+		},
+		"layout": {
+			"x": 6,
+			"y": 0,
+			"width": 1,
+			"height": 3
+		}
+	}, {
+		"id": 3784783274684596,
+		"definition": {
+			"title": "BIG-IP Memory Utlilzation (%)",
+			"title_size": "16",
+			"title_align": "left",
+			"show_legend": true,
+			"legend_layout": "vertical",
+			"legend_columns": ["avg", "min", "max"],
+			"type": "timeseries",
+			"requests": [{
+				"formulas": [{
+					"alias": "TMM Memory(%)",
+					"formula": "query2"
+				}, {
+					"alias": "Avg Memory(%)",
+					"formula": "query1 / 100"
+				}],
+				"response_format": "timeseries",
+				"on_right_yaxis": false,
+				"queries": [{
+					"query": "avg:AvgMemory{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query1"
+				}, {
+					"query": "avg:system.tmmMemory{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query2"
+				}],
+				"style": {
+					"palette": "warm",
+					"line_type": "solid",
+					"line_width": "normal"
+				},
+				"display_type": "line"
+			}],
+			"yaxis": {
+				"include_zero": false,
+				"min": "0",
+				"max": "100"
+			},
+			"markers": []
+		},
+		"layout": {
+			"x": 7,
+			"y": 0,
+			"width": 5,
+			"height": 3
+		}
+	}, {
+		"id": 7653925382838326,
+		"definition": {
+			"title": "Transactions per Second (TPS)",
+			"title_size": "16",
+			"title_align": "left",
+			"show_legend": true,
+			"legend_layout": "vertical",
+			"legend_columns": ["avg", "min", "max"],
+			"type": "timeseries",
+			"requests": [{
+				"formulas": [{
+					"alias": "TPS",
+					"formula": "query1"
+				}],
+				"response_format": "timeseries",
+				"on_right_yaxis": false,
+				"queries": [{
+					"query": "avg:transactions{$hostname AND pool_name NOT IN (/common/shared/telemetry,N/A)} by {hostname,pool_name}",
+					"data_source": "metrics",
+					"name": "query1"
+				}],
+				"style": {
+					"palette": "dog_classic",
+					"line_type": "solid",
+					"line_width": "normal"
+				},
+				"display_type": "line"
+			}],
+			"yaxis": {
+				"include_zero": true,
+				"scale": "linear",
+				"label": "",
+				"min": "auto",
+				"max": "auto"
+			},
+			"markers": []
+		},
+		"layout": {
+			"x": 0,
+			"y": 3,
+			"width": 6,
+			"height": 4
+		}
+	}, {
+		"id": 6159499809851822,
+		"definition": {
+			"title": "Packet Throughput",
+			"title_size": "16",
+			"title_align": "left",
+			"show_legend": true,
+			"legend_layout": "vertical",
+			"legend_columns": ["avg", "min", "max"],
+			"type": "timeseries",
+			"requests": [{
+				"formulas": [{
+					"alias": "Client Pkts In",
+					"formula": "query1"
+				}, {
+					"alias": "Client Pkts Out",
+					"formula": "query2"
+				}, {
+					"alias": "Server Pkts In",
+					"formula": "query3"
+				}, {
+					"alias": "Server Pkts Out",
+					"formula": "query4"
+				}],
+				"response_format": "timeseries",
+				"on_right_yaxis": false,
+				"queries": [{
+					"query": "avg:ClientPktsIn{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query1"
+				}, {
+					"query": "avg:ClientPktsOut{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query2"
+				}, {
+					"query": "avg:server_pkts_in{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query3"
+				}, {
+					"query": "avg:server_pkts_out{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query4"
+				}],
+				"style": {
+					"palette": "cool",
+					"line_type": "solid",
+					"line_width": "normal"
+				},
+				"display_type": "line"
+			}],
+			"yaxis": {
+				"include_zero": true,
+				"scale": "linear",
+				"label": "",
+				"min": "auto",
+				"max": "auto"
+			},
+			"markers": []
+		},
+		"layout": {
+			"x": 6,
+			"y": 3,
+			"width": 6,
+			"height": 4
+		}
+	}, {
+		"id": 181507040622778,
+		"definition": {
+			"title": "Request/Response Throughput",
+			"title_size": "16",
+			"title_align": "left",
+			"show_legend": true,
+			"legend_layout": "vertical",
+			"legend_columns": ["avg", "min", "max"],
+			"type": "timeseries",
+			"requests": [{
+				"formulas": [{
+					"alias": "Requests",
+					"formula": "query1"
+				}, {
+					"alias": "Responses",
+					"formula": "query2"
+				}],
+				"response_format": "timeseries",
+				"on_right_yaxis": false,
+				"queries": [{
+					"query": "avg:ThroughputReqMaxPerSec{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query1"
+				}, {
+					"query": "avg:ThroughputRespMaxPerSec{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query2"
+				}],
+				"style": {
+					"palette": "orange",
+					"line_type": "solid",
+					"line_width": "normal"
+				},
+				"display_type": "line"
+			}],
+			"yaxis": {
+				"include_zero": true,
+				"scale": "linear",
+				"label": "",
+				"min": "auto",
+				"max": "auto"
+			},
+			"markers": []
+		},
+		"layout": {
+			"x": 0,
+			"y": 7,
+			"width": 6,
+			"height": 4
+		}
+	}, {
+		"id": 526627417393616,
+		"definition": {
+			"title": "TCP Round Trip Time (RTT)",
+			"title_size": "16",
+			"title_align": "left",
+			"show_legend": true,
+			"legend_layout": "vertical",
+			"legend_columns": ["min", "max", "avg"],
+			"type": "timeseries",
+			"requests": [{
+				"formulas": [{
+					"alias": "RTT Max (ms)",
+					"formula": "query1"
+				}, {
+					"alias": "RTT Min (ms)",
+					"formula": "query2"
+				}],
+				"response_format": "timeseries",
+				"queries": [{
+					"query": "avg:RTTMax{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query1"
+				}, {
+					"query": "avg:RTTMin{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query2"
+				}],
+				"style": {
+					"palette": "dog_classic",
+					"line_type": "solid",
+					"line_width": "normal"
+				},
+				"display_type": "line"
+			}],
+			"yaxis": {
+				"include_zero": true,
+				"scale": "linear",
+				"label": "",
+				"min": "auto",
+				"max": "auto"
+			},
+			"markers": []
+		},
+		"layout": {
+			"x": 6,
+			"y": 7,
+			"width": 6,
+			"height": 4
+		}
+	}],
+	"template_variables": [{
+		"name": "hostname",
+		"default": "*",
+		"prefix": "hostname",
+		"available_values": []
+	}],
+	"layout_type": "ordered",
+	"is_read_only": false,
+	"notify_list": [],
+	"reflow_type": "fixed",
+	"id": "hjb-h3x-dsj"
+}

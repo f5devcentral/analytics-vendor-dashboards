@@ -1,0 +1,34 @@
+{
+	"class": "Telemetry",
+    "controls": {
+         "class": "Controls",
+         "logLevel": "debug",
+         "debug": true
+     },
+	"My_System": {
+		"class": "Telemetry_System",
+		"systemPoller": {
+			"interval": 60,
+			"actions": [{
+				"includeData": {},
+                "locations": {
+                    "system": true
+                }
+            }]
+		}
+	},
+	"My_Listener": {
+		"class": "Telemetry_Listener",
+        "trace": true,
+		"port": 6514
+	},
+    "My_Consumer": {
+        "class": "Telemetry_Consumer",
+        "type": "DataDog",
+        "apiKey": "xxxxxxxxxxxxxxxxxxxxxxx",
+        "compressionType": "gzip",
+        "region": "US1",
+        "service": "f5-telemetry"
+
+    }
+}

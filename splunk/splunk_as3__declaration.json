@@ -66,7 +66,15 @@
 						"use": "telemetry"
 					},
 					"requestTemplate": "event_source=\"request_logging\",hostname=\"$BIGIP_HOSTNAME\",client_ip=\"$CLIENT_IP\",server_ip=\"$SERVER_IP\",http_method=\"$HTTP_METHOD\",http_uri=\"$HTTP_URI\",virtual_name=\"$VIRTUAL_NAME\",event_timestamp=\"$DATE_HTTP\""
-				}
+				},
+                "responseSettings": {
+                    "responseEnabled": true,
+                    "responseProtocol": "mds-tcp",
+                    "responsePool": {
+                        "use": "telemetry"
+                    },
+                    "responseTemplate": "event_source=\"response_logging\",hostname=\"$BIGIP_HOSTNAME\",client_ip=\"$CLIENT_IP\",server_ip=\"$SERVER_IP\",http_method=\"$HTTP_METHOD\",http_uri=\"$HTTP_URI\",virtual_name=\"$VIRTUAL_NAME\",event_timestamp=\"$DATE_HTTP\",http_statcode=\"$HTTP_STATCODE\",http_status=\"$HTTP_STATUS\",response_ms=\"$RESPONSE_MSECS\""
+                }
 			},
 			"telemetry_http_analytics_profile": {
 				"class": "Analytics_Profile",
@@ -108,7 +116,35 @@
 						"requestType": "all"
 					}
 				}
-			}
+			},            
+            "telemetry_afm_security_log_profile": {
+                "class": "Security_Log_Profile",
+                "application": {
+                    "localStorage": false,
+                    "remoteStorage": "splunk",
+                    "protocol": "tcp",
+                    "servers": [
+                        {
+                            "address": "255.255.255.254",
+                            "port": "6514"
+                        }
+                    ],
+                    "storageFilter": {
+                        "requestType": "illegal-including-staged-signatures"
+                    }
+                },
+                "network": {
+                    "publisher": {
+                        "use": "telemetry_publisher"
+                    },
+                    "logRuleMatchAccepts": true,
+                    "logRuleMatchRejects": true,
+                    "logRuleMatchDrops": true,
+                    "logIpErrors": true,
+                    "logTcpErrors": true,
+                    "logTcpEvents": true
+                }
+            }
 		}
 	}
 }

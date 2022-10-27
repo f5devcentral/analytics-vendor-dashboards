@@ -13,7 +13,7 @@
       <fieldForLabel>namespace</fieldForLabel>
       <fieldForValue>namespace</fieldForValue>
       <search>
-        <query>index=* req_id=* namespace=* | table namespace | dedup namespace</query>
+        <query>index=* req_id=* rtt_upstream_seconds=* namespace=* | table namespace | dedup namespace</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
@@ -26,7 +26,7 @@
       <fieldForLabel>domain</fieldForLabel>
       <fieldForValue>domain</fieldForValue>
       <search>
-        <query>index=* req_id=* namespace="$namespace_token$"domain=* | table domain | dedup domain</query>
+        <query>index=* req_id=* rtt_upstream_seconds=* namespace="$namespace_token$"domain=* | table domain | dedup domain</query>
         <earliest>-7d@h</earliest>
         <latest>now</latest>
       </search>
@@ -39,7 +39,7 @@
       <title>Requests by response code over time</title>
       <chart>
         <search>
-          <query>index=* req_id=* namespace="$namespace_token$" domain="$domain_token$"| timechart count(req_id) by rsp_code</query>
+          <query>index=* req_id=* rtt_upstream_seconds=* namespace="$namespace_token$" domain="$domain_token$"| timechart count(req_id) by rsp_code</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -88,7 +88,7 @@
       <title>Requests by Domain</title>
       <chart>
         <search>
-          <query>index=* req_id=* namespace="$namespace_token$" | chart count(req_id) by domain</query>
+          <query>index=* req_id=* rtt_upstream_seconds=* namespace="$namespace_token$" | chart count(req_id) by domain</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
           <refresh>30s</refresh>
@@ -103,7 +103,7 @@
       <title>Request by Country</title>
       <map>
         <search>
-          <query>index=* connection_state=* req_id=* namespace="$namespace_token$" domain="$domain_token$" | iplocation src_ip
+          <query>index=* connection_state=* req_id=* rtt_upstream_seconds=* namespace="$namespace_token$" domain="$domain_token$" | iplocation src_ip
 | stats count by Country| geom geo_countries allFeatures=True featureIdField=Country</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
@@ -146,7 +146,7 @@
       <title>Request Log Entries</title>
       <table>
         <search>
-          <query>index=* req_id=* namespace="$namespace_token$" domain="$domain_token$" | rename severity as Severity domain as Application rsp_code as Response_Code method as Method connection_state as Connection_State src_ip as ClientIP req_id as RequestID | table @timestamp, RequestID, ClientIP, Method, Connection_State, Response_Code, Severity, Application</query>
+          <query>index=* req_id=* rtt_upstream_seconds=* namespace="$namespace_token$" domain="$domain_token$" | rename severity as Severity domain as Application rsp_code as Response_Code method as Method connection_state as Connection_State src_ip as ClientIP req_id as RequestID | table @timestamp, RequestID, ClientIP, Method, Connection_State, Response_Code, Severity, Application</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -156,10 +156,10 @@
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">row</option>
-        <option name="percentagesRow">true</option>
+        <option name="percentagesRow">false</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
-        <option name="totalsRow">true</option>
+        <option name="totalsRow">false</option>
         <option name="wrap">true</option>
       </table>
     </panel>

@@ -1,0 +1,301 @@
+{
+	"visualizations": {
+		"viz_chart_1": {
+			"type": "splunk.line",
+			"dataSources": {
+				"primary": "ds_search_3"
+			},
+			"showProgressBar": true,
+			"title": "Events by event type over time",
+			"options": {
+				"yAxisAbbreviation": "auto",
+				"y2AxisAbbreviation": "auto",
+				"showRoundedY2AxisLabels": false,
+				"legendTruncation": "ellipsisEnd",
+				"showY2MajorGridLines": true,
+				"xAxisLabelRotation": 0,
+				"xAxisTitleVisibility": "hide",
+				"yAxisTitleText": "# of Requests",
+				"yAxisTitleVisibility": "show",
+				"y2AxisTitleVisibility": "show",
+				"yAxisScale": "linear",
+				"showOverlayY2Axis": 0,
+				"y2AxisScale": "inherit",
+				"nullValueDisplay": "connect",
+				"dataValuesDisplay": "minmax",
+				"showSplitSeries": 0,
+				"showIndependentYRanges": 0,
+				"legendMode": "standard",
+				"legendDisplay": "bottom",
+				"lineWidth": 2
+			}
+		},
+		"viz_chart_2": {
+			"type": "splunk.pie",
+			"dataSources": {
+				"primary": "ds_search_4"
+			},
+			"showProgressBar": true,
+			"title": "Events by Attack_Type",
+			"options": {
+				"labelDisplay": "valuesAndPercentage"
+			}
+		},
+		"viz_map_1": {
+			"type": "viz.geojson.world",
+			"options": {
+				"name": "WORLD",
+				"source": "geo://default/world",
+				"projection": "mercator",
+				"sourceBounds": {
+					"lat": {
+						"min": -60,
+						"max": 85
+					},
+					"long": {
+						"min": -180,
+						"max": 180
+					}
+				},
+				"logicalBounds": {
+					"x": {
+						"min": 0,
+						"max": 800
+					},
+					"y": {
+						"min": 0,
+						"max": 600
+					}
+				},
+				"fillColor": "#EAEFF2",
+				"strokeColor": "#689C8D",
+				"strokeHighlightColor": "#000000",
+				"selector": ".feature"
+			},
+			"dataSources": {
+				"primary": "ds_search_5"
+			},
+			"showProgressBar": true,
+			"title": "Events by Country",
+			"encoding": {
+				"featureId": "primary[0]",
+				"value": "primary[1]",
+				"fill": {
+					"field": "primary[1]",
+					"format": {
+						"type": "gradient",
+						"values": [
+							"#62b3b2",
+							"#1182f3"
+						]
+					}
+				}
+			},
+			"context": {},
+			"showLastUpdated": false
+		},
+		"viz_table_1": {
+			"type": "splunk.table",
+			"options": {
+				"count": 20,
+				"dataOverlayMode": "none",
+				"drilldown": "row",
+				"percentagesRow": false,
+				"rowNumbers": false,
+				"totalsRow": false,
+				"wrap": true
+			},
+			"dataSources": {
+				"primary": "ds_search_6"
+			},
+			"showProgressBar": true,
+			"title": "Request Log Entries    (most recent 25)"
+		}
+	},
+	"dataSources": {
+		"ds_search_1": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=* req_id=* sec_event_name=* namespace=* | table namespace | dedup namespace",
+				"queryParameters": {
+					"earliest": "-24h@h",
+					"latest": "now"
+				}
+			},
+			"name": "namespace_query"
+		},
+		"ds_search_2": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=* req_id=* sec_event_name=* namespace=\"$namespace_token$\"domain=* | table domain | dedup domain",
+				"queryParameters": {
+					"earliest": "-7d@h",
+					"latest": "now"
+				}
+			},
+			"name": "domain_query"
+		},
+		"ds_search_3": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=* req_id=* sec_event_name=* namespace=\"$namespace_token$\" domain=\"$domain_token$\"| timechart count(req_id) by sec_event_name",
+				"queryParameters": {
+					"earliest": "$field1.earliest$",
+					"latest": "$field1.latest$"
+				},
+				"refresh": "30s",
+				"refreshType": "delay"
+			},
+			"name": "events over time"
+		},
+		"ds_search_4": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=* sec_event_name=* namespace=\"$namespace_token$\" domain=\"$domain_token$\" | spath output=Attack_Type violations{}.attack_type | chart count(req_id) by Attack_Type",
+				"queryParameters": {
+					"earliest": "$field1.earliest$",
+					"latest": "$field1.latest$"
+				},
+				"refresh": "30s",
+				"refreshType": "delay"
+			},
+			"name": "security_events_by_attacktype"
+		},
+		"ds_search_5": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=* sec_event_name=* namespace=\"$namespace_token$\" domain=\"$domain_token$\"| iplocation src_ip\n| stats count by Country| geom geo_countries allFeatures=True featureIdField=Country",
+				"queryParameters": {
+					"earliest": "$field1.earliest$",
+					"latest": "$field1.latest$"
+				},
+				"refresh": "30s",
+				"refreshType": "delay"
+			},
+			"name": "Events by Country"
+		},
+		"ds_search_6": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=* sec_event_name=* namespace=\"$namespace_token$\" domain=\"$domain_token$\"| spath output=Attack_Type violations{}.attack_type | eval aDateTime=strptime(time,\"%Y-%m-%dT%H:%M:%S.%QZ\") | eval DateTime = strftime(aDateTime,\"%m/%d/%y %H:%M:%S:%3N\") | table DateTime, req_id, action, bot_classification, bot_name, bot_type, Attack_Type \n|  sort 25 -DateTime",
+				"queryParameters": {
+					"earliest": "$field1.earliest$",
+					"latest": "$field1.latest$"
+				},
+				"refresh": "30s",
+				"refreshType": "delay"
+			},
+			"name": "security_events_query"
+		}
+	},
+	"defaults": {
+		"dataSources": {
+			"ds.search": {
+				"options": {
+					"queryParameters": {}
+				}
+			}
+		}
+	},
+	"inputs": {
+		"input_1": {
+			"type": "input.timerange",
+			"title": "",
+			"options": {
+				"token": "field1",
+				"defaultValue": "-24h@h,now"
+			}
+		},
+		"input_2": {
+			"type": "input.dropdown",
+			"title": "Namespace(s)",
+			"options": {
+				"token": "namespace_token",
+				"defaultValue": "*",
+				"items": [
+					{
+						"value": "*",
+						"label": "All"
+					}
+				]
+			},
+			"dataSources": {
+				"primary": "ds_search_1"
+			}
+		},
+		"input_3": {
+			"type": "input.dropdown",
+			"title": "Domain",
+			"options": {
+				"token": "domain_token",
+				"defaultValue": "*",
+				"items": [
+					{
+						"value": "*",
+						"label": "All"
+					}
+				]
+			},
+			"dataSources": {
+				"primary": "ds_search_2"
+			}
+		}
+	},
+	"layout": {
+		"type": "absolute",
+		"options": {
+			"submitButton": false,
+			"display": "auto-scale",
+			"height": 862
+		},
+		"structure": [
+			{
+				"item": "viz_chart_1",
+				"type": "block",
+				"position": {
+					"x": 10,
+					"y": 280,
+					"w": 1180,
+					"h": 200
+				}
+			},
+			{
+				"item": "viz_chart_2",
+				"type": "block",
+				"position": {
+					"x": 10,
+					"y": 20,
+					"w": 360,
+					"h": 250
+				}
+			},
+			{
+				"item": "viz_map_1",
+				"type": "block",
+				"position": {
+					"x": 380,
+					"y": 20,
+					"w": 360,
+					"h": 250
+				}
+			},
+			{
+				"item": "viz_table_1",
+				"type": "block",
+				"position": {
+					"x": 10,
+					"y": 490,
+					"w": 1180,
+					"h": 250
+				}
+			}
+		],
+		"globalInputs": [
+			"input_1",
+			"input_2",
+			"input_3"
+		]
+	},
+	"description": "",
+	"title": "F5 XC Security Events Overview"
+}

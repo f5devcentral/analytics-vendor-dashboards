@@ -348,8 +348,8 @@
 						"value": "60m"
 					}
 				],
-				"defaultValue": "30s",
-				"token": "refresh_token"
+				"token": "refresh_token",
+				"defaultValue": "5m"
 			},
 			"title": "Refresh Rate",
 			"type": "input.dropdown"

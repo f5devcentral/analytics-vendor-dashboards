@@ -273,7 +273,7 @@
 					}
 				],
 				"token": "refresh_token",
-				"defaultValue": "30s"
+				"defaultValue": "5m"
 			},
 			"title": "Refresh Rate",
 			"type": "input.dropdown"

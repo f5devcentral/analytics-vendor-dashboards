@@ -15,7 +15,7 @@
 				"showY2MajorGridLines": true,
 				"xAxisLabelRotation": 0,
 				"xAxisTitleVisibility": "hide",
-				"yAxisTitleText": "# of Requests",
+				"yAxisTitleText": "# of Reqs",
 				"yAxisTitleVisibility": "show",
 				"y2AxisTitleVisibility": "show",
 				"yAxisScale": "linear",
@@ -143,7 +143,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "30s",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "events over time"
@@ -156,7 +156,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "30s",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "security_events_by_attacktype"
@@ -169,7 +169,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "30s",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "Events by Country"
@@ -182,7 +182,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "30s",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "security_events_query"
@@ -239,6 +239,44 @@
 			"dataSources": {
 				"primary": "ds_search_2"
 			}
+		},
+		"input_ozp7ZFYD": {
+			"options": {
+				"items": [
+					{
+						"label": "30 seconds",
+						"value": "30s"
+					},
+					{
+						"label": "1 minute",
+						"value": "1m"
+					},
+					{
+						"label": "3 minutes",
+						"value": "3m"
+					},
+					{
+						"label": "5 minutes",
+						"value": "5m"
+					},
+					{
+						"label": "15 minutes",
+						"value": "15m"
+					},
+					{
+						"label": "30 minutes",
+						"value": "30m"
+					},
+					{
+						"label": "1 hour",
+						"value": "60m"
+					}
+				],
+				"token": "refresh_token",
+				"defaultValue": "30s"
+			},
+			"title": "Refresh Rate",
+			"type": "input.dropdown"
 		}
 	},
 	"layout": {
@@ -254,7 +292,7 @@
 				"type": "block",
 				"position": {
 					"x": 10,
-					"y": 280,
+					"y": 250,
 					"w": 1180,
 					"h": 200
 				}
@@ -264,19 +302,19 @@
 				"type": "block",
 				"position": {
 					"x": 10,
-					"y": 20,
-					"w": 360,
-					"h": 250
+					"y": 10,
+					"w": 380,
+					"h": 230
 				}
 			},
 			{
 				"item": "viz_map_1",
 				"type": "block",
 				"position": {
-					"x": 380,
-					"y": 20,
-					"w": 360,
-					"h": 250
+					"x": 400,
+					"y": 10,
+					"w": 380,
+					"h": 230
 				}
 			},
 			{
@@ -284,7 +322,7 @@
 				"type": "block",
 				"position": {
 					"x": 10,
-					"y": 490,
+					"y": 460,
 					"w": 1180,
 					"h": 250
 				}
@@ -293,7 +331,8 @@
 		"globalInputs": [
 			"input_1",
 			"input_2",
-			"input_3"
+			"input_3",
+			"input_ozp7ZFYD"
 		]
 	},
 	"description": "",

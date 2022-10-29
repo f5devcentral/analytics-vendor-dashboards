@@ -206,7 +206,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "1m",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "reqovertime"
@@ -219,7 +219,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "1m",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "reqbydomain"
@@ -232,7 +232,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "1m",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "reqbycountry"
@@ -245,7 +245,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "1m",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "logentries_query"
@@ -258,7 +258,7 @@
 					"earliest": "$field1.earliest$",
 					"latest": "$field1.latest$"
 				},
-				"refresh": "1m",
+				"refresh": "$refresh_token$",
 				"refreshType": "delay"
 			},
 			"name": "respcodes"
@@ -276,7 +276,7 @@
 	"inputs": {
 		"input_1": {
 			"type": "input.timerange",
-			"title": "Date/Time Range",
+			"title": "Time Picker",
 			"options": {
 				"token": "field1",
 				"defaultValue": "-4h@m,now"
@@ -315,6 +315,44 @@
 			"dataSources": {
 				"primary": "ds_search_2"
 			}
+		},
+		"input_Sy0eQKAl": {
+			"options": {
+				"items": [
+					{
+						"label": "30 seconds",
+						"value": "30s"
+					},
+					{
+						"label": "1 minute",
+						"value": "1m"
+					},
+					{
+						"label": "3 minutes",
+						"value": "3m"
+					},
+					{
+						"label": "5 minutes",
+						"value": "5m"
+					},
+					{
+						"label": "15 minutes",
+						"value": "15m"
+					},
+					{
+						"label": "30 minutes",
+						"value": "30m"
+					},
+					{
+						"label": "1 hour",
+						"value": "60m"
+					}
+				],
+				"defaultValue": "30s",
+				"token": "refresh_token"
+			},
+			"title": "Refresh Rate",
+			"type": "input.dropdown"
 		}
 	},
 	"layout": {
@@ -379,7 +417,8 @@
 		"globalInputs": [
 			"input_1",
 			"input_2",
-			"input_3"
+			"input_3",
+			"input_Sy0eQKAl"
 		]
 	},
 	"description": "",

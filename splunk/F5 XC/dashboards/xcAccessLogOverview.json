@@ -1,426 +1,335 @@
 {
-	"visualizations": {
-		"viz_chart_1": {
-			"type": "splunk.line",
-			"dataSources": {
-				"primary": "ds_search_3"
-			},
-			"showProgressBar": true,
-			"title": "Requests by response code over time",
-			"options": {
-				"yAxisAbbreviation": "auto",
-				"y2AxisAbbreviation": "auto",
-				"showRoundedY2AxisLabels": false,
-				"legendTruncation": "ellipsisEnd",
-				"showY2MajorGridLines": true,
-				"xAxisLabelRotation": 0,
-				"xAxisTitleVisibility": "hide",
-				"yAxisTitleText": "# of Reqs",
-				"yAxisTitleVisibility": "show",
-				"y2AxisTitleVisibility": "show",
-				"yAxisScale": "linear",
-				"showOverlayY2Axis": 0,
-				"y2AxisScale": "inherit",
-				"nullValueDisplay": "connect",
-				"dataValuesDisplay": "minmax",
-				"showSplitSeries": 0,
-				"showIndependentYRanges": 0,
-				"legendMode": "standard",
-				"legendDisplay": "bottom",
-				"lineWidth": 2
-			}
-		},
-		"viz_chart_2": {
-			"type": "splunk.pie",
-			"dataSources": {
-				"primary": "ds_search_4"
-			},
-			"showProgressBar": true,
-			"title": "Requests by Domain",
-			"options": {},
-			"context": {}
-		},
-		"viz_map_1": {
-			"type": "viz.geojson.world",
-			"options": {
-				"drilldown": "none",
-				"mapping.choroplethLayer.colorBins": 5,
-				"mapping.choroplethLayer.colorMode": "auto",
-				"mapping.choroplethLayer.maximumColor": "0x1182f3",
-				"mapping.choroplethLayer.minimumColor": "0x62b3b2",
-				"mapping.choroplethLayer.neutralPoint": 0,
-				"mapping.choroplethLayer.shapeOpacity": 0.75,
-				"mapping.choroplethLayer.showBorder": 1,
-				"mapping.data.maxClusters": 100,
-				"mapping.legend.placement": "bottomright",
-				"mapping.map.center": "(0,0)",
-				"mapping.map.panning": 1,
-				"mapping.map.scrollZoom": 0,
-				"mapping.map.zoom": 2,
-				"mapping.markerLayer.markerMaxSize": 50,
-				"mapping.markerLayer.markerMinSize": 10,
-				"mapping.markerLayer.markerOpacity": 0.8,
-				"mapping.showTiles": 1,
-				"mapping.tileLayer.maxZoom": 7,
-				"mapping.tileLayer.minZoom": 0,
-				"mapping.tileLayer.tileOpacity": 1,
-				"mapping.type": "choropleth",
-				"trellis.enabled": 0,
-				"trellis.scales.shared": 1,
-				"trellis.size": "medium",
-				"projection": "mercator",
-				"fillColor": "#EAEFF2",
-				"strokeColor": "#689C8D",
-				"selector": ".feature",
-				"logicalBounds": {
-					"x": {
-						"min": 0,
-						"max": 800
-					},
-					"y": {
-						"min": 0,
-						"max": 600
-					}
-				},
-				"name": "world",
-				"source": "geo://default/world",
-				"sourceBounds": {
-					"lat": {
-						"min": -60,
-						"max": 85
-					},
-					"long": {
-						"min": -180,
-						"max": 180
-					}
-				}
-			},
-			"dataSources": {
-				"primary": "ds_search_5"
-			},
-			"showProgressBar": true,
-			"title": "Requests by Country",
-			"encoding": {
-				"featureId": "primary[0]",
-				"value": "primary[1]",
-				"fill": {
-					"field": "primary[1]",
-					"format": {
-						"type": "gradient",
-						"values": [
-							"#62b3b2",
-							"#1182f3"
-						]
-					}
-				}
-			}
-		},
-		"viz_table_1": {
-			"type": "splunk.table",
-			"options": {
-				"count": 20,
-				"dataOverlayMode": "none",
-				"drilldown": "row",
-				"percentagesRow": false,
-				"rowNumbers": false,
-				"totalsRow": false,
-				"wrap": true,
-				"tableFormat": {
-					"rowBackgroundColors": "> table | seriesByIndex(0) | pick(tableAltRowBackgroundColorsByTheme)"
-				},
-				"backgroundColor": "> themes.defaultBackgroundColor",
-				"columnFormat": {
-					"@timestamp": {
-						"data": "> table | seriesByName(\"@timestamp\") | formatByType(_timestampColumnFormatEditorConfig)"
-					},
-					"Date/Time": {
-						"data": "> table | seriesByName(\"Date/Time\") | formatByType(Date_TimeColumnFormatEditorConfig)"
-					},
-					"Response_Code": {
-						"data": "> table | seriesByName(\"Response_Code\") | formatByType(Response_CodeColumnFormatEditorConfig)"
-					}
-				}
-			},
-			"dataSources": {
-				"primary": "ds_search_6"
-			},
-			"showProgressBar": true,
-			"title": "Request Log Entries (most recent 25)",
-			"context": {
-				"_timestampColumnFormatEditorConfig": {
-					"time": {
-						"format": "MM/DD/YY - HH:MM:SS"
-					}
-				},
-				"Date_TimeColumnFormatEditorConfig": {
-					"time": {
-						"format": "MM/DD/YY hh:mm:ss"
-					}
-				},
-				"Response_CodeColumnFormatEditorConfig": {
-					"number": {
-						"thousandSeparated": false,
-						"unitPosition": "after"
-					}
-				}
-			}
-		},
-		"viz_UNOTNlaN": {
-			"type": "splunk.pie",
-			"dataSources": {
-				"primary": "ds_0Uz4hMX9_ds_search_4"
-			},
-			"showProgressBar": true,
-			"title": "Response Codes"
-		}
-	},
-	"dataSources": {
-		"ds_search_1": {
-			"type": "ds.search",
-			"options": {
-				"query": "index=* req_id=* rtt_upstream_seconds=* namespace=* \n| table namespace | dedup namespace",
-				"queryParameters": {
-					"earliest": "$field1.earliest$",
-					"latest": "$field1.latest$"
-				}
-			},
-			"name": "namespace_query"
-		},
-		"ds_search_2": {
-			"type": "ds.search",
-			"options": {
-				"query": "index=* req_id=* rtt_upstream_seconds=* namespace=\"$namespace_token$\" domain=* | table domain | dedup domain",
-				"queryParameters": {
-					"earliest": "$field1.earliest$",
-					"latest": "$field1.latest$"
-				},
-				"enableSmartSources": true
-			},
-			"name": "domain_query"
-		},
-		"ds_search_3": {
-			"type": "ds.search",
-			"options": {
-				"query": "index=* req_id=* rtt_upstream_seconds=* namespace=\"$namespace_token$\" domain=\"$domain_token$\"| timechart count(req_id) by rsp_code",
-				"queryParameters": {
-					"earliest": "$field1.earliest$",
-					"latest": "$field1.latest$"
-				},
-				"refresh": "$refresh_token$",
-				"refreshType": "delay"
-			},
-			"name": "reqovertime"
-		},
-		"ds_search_4": {
-			"type": "ds.search",
-			"options": {
-				"query": "index=* req_id=* rtt_upstream_seconds=* namespace=\"$namespace_token$\" | chart count(req_id) by domain",
-				"queryParameters": {
-					"earliest": "$field1.earliest$",
-					"latest": "$field1.latest$"
-				},
-				"refresh": "$refresh_token$",
-				"refreshType": "delay"
-			},
-			"name": "reqbydomain"
-		},
-		"ds_search_5": {
-			"type": "ds.search",
-			"options": {
-				"query": "index=* connection_state=* req_id=* rtt_upstream_seconds=* namespace=\"$namespace_token$\" domain=\"$domain_token$\" | iplocation src_ip\n| stats count by Country| geom geo_countries allFeatures=True featureIdField=Country",
-				"queryParameters": {
-					"earliest": "$field1.earliest$",
-					"latest": "$field1.latest$"
-				},
-				"refresh": "$refresh_token$",
-				"refreshType": "delay"
-			},
-			"name": "reqbycountry"
-		},
-		"ds_search_6": {
-			"type": "ds.search",
-			"options": {
-				"query": "index=* req_id=* rtt_upstream_seconds=* namespace=\"$namespace_token$\" domain=\"$domain_token$\" \n| eval aDateTime=strptime(time,\"%Y-%m-%dT%H:%M:%S.%QZ\") | eval DateTime = strftime(aDateTime,\"%m/%d/%y %H:%M:%S:%3N\") | rename severity as Severity domain as Application rsp_code as Response_Code method as Method connection_state as Connection_State src_ip as ClientIP req_id as RequestID | table DateTime, RequestID, ClientIP, Method, Connection_State, Response_Code, Severity, Application \n|  sort 25 -DateTime",
-				"queryParameters": {
-					"earliest": "$field1.earliest$",
-					"latest": "$field1.latest$"
-				},
-				"refresh": "$refresh_token$",
-				"refreshType": "delay"
-			},
-			"name": "logentries_query"
-		},
-		"ds_0Uz4hMX9_ds_search_4": {
-			"type": "ds.search",
-			"options": {
-				"query": "index=* req_id=* rtt_upstream_seconds=* namespace=\"$namespace_token$\" | chart count(req_id) by  rsp_code_class",
-				"queryParameters": {
-					"earliest": "$field1.earliest$",
-					"latest": "$field1.latest$"
-				},
-				"refresh": "$refresh_token$",
-				"refreshType": "delay"
-			},
-			"name": "respcodes"
-		}
-	},
-	"defaults": {
-		"dataSources": {
-			"ds.search": {
-				"options": {
-					"queryParameters": {}
-				}
-			}
-		}
-	},
-	"inputs": {
-		"input_1": {
-			"type": "input.timerange",
-			"title": "Time Picker",
-			"options": {
-				"token": "field1",
-				"defaultValue": "-4h@m,now"
-			}
-		},
-		"input_2": {
-			"type": "input.dropdown",
-			"title": "Namespace(s)",
-			"options": {
-				"token": "namespace_token",
-				"defaultValue": "*",
-				"items": [
-					{
-						"value": "*",
-						"label": "All"
-					}
-				]
-			},
-			"dataSources": {
-				"primary": "ds_search_1"
-			}
-		},
-		"input_3": {
-			"type": "input.dropdown",
-			"title": "Domain",
-			"options": {
-				"token": "domain_token",
-				"defaultValue": "*",
-				"items": [
-					{
-						"label": "All",
-						"value": "*"
-					}
-				]
-			},
-			"dataSources": {
-				"primary": "ds_search_2"
-			}
-		},
-		"input_Sy0eQKAl": {
-			"options": {
-				"items": [
-					{
-						"label": "30 seconds",
-						"value": "30s"
-					},
-					{
-						"label": "1 minute",
-						"value": "1m"
-					},
-					{
-						"label": "3 minutes",
-						"value": "3m"
-					},
-					{
-						"label": "5 minutes",
-						"value": "5m"
-					},
-					{
-						"label": "15 minutes",
-						"value": "15m"
-					},
-					{
-						"label": "30 minutes",
-						"value": "30m"
-					},
-					{
-						"label": "1 hour",
-						"value": "60m"
-					}
-				],
-				"token": "refresh_token",
-				"defaultValue": "5m"
-			},
-			"title": "Refresh Rate",
-			"type": "input.dropdown"
-		}
-	},
-	"layout": {
-		"type": "absolute",
-		"options": {
-			"submitButton": false,
-			"display": "auto-scale",
-			"height": 862
-		},
-		"structure": [
-			{
-				"item": "viz_chart_1",
-				"type": "block",
-				"position": {
-					"x": 10,
-					"y": 10,
-					"w": 1180,
-					"h": 200
-				}
-			},
-			{
-				"item": "viz_chart_2",
-				"type": "block",
-				"position": {
-					"x": 10,
-					"y": 220,
-					"w": 388,
-					"h": 240
-				}
-			},
-			{
-				"item": "viz_map_1",
-				"type": "block",
-				"position": {
-					"x": 410,
-					"y": 220,
-					"w": 388,
-					"h": 240
-				}
-			},
-			{
-				"item": "viz_table_1",
-				"type": "block",
-				"position": {
-					"x": 0,
-					"y": 470,
-					"w": 1180,
-					"h": 270
-				}
-			},
-			{
-				"item": "viz_UNOTNlaN",
-				"type": "block",
-				"position": {
-					"x": 810,
-					"y": 220,
-					"w": 388,
-					"h": 240
-				}
-			}
-		],
-		"globalInputs": [
-			"input_1",
-			"input_2",
-			"input_3",
-			"input_Sy0eQKAl"
-		]
-	},
-	"description": "",
-	"title": "F5 XC Access Log Overview"
-}
+    "title": "F5DCS - Access Log Overview",
+    "description": "The F5 XC Access Log dashboard provides an overview of application access requests within a selected namespace(s).",
+    "widgets": [
+      {
+        "id": 3363713706766908,
+        "definition": {
+          "type": "image",
+          "url": "https://github.com/f5devcentral/analytics-vendor-dashboards/raw/main/datadog/xcac.png",
+          "sizing": "contain",
+          "margin": "lg",
+          "has_background": true,
+          "has_border": false,
+          "vertical_align": "top",
+          "horizontal_align": "center"
+        },
+        "layout": {
+          "x": 0,
+          "y": 0,
+          "width": 3,
+          "height": 3
+        }
+      },
+      {
+        "id": 3719759240562384,
+        "definition": {
+          "title": "Requests by Domain",
+          "title_size": "16",
+          "title_align": "left",
+          "requests": [
+            {
+              "formulas": [
+                {
+                  "formula": "a",
+                  "limit": {
+                    "count": 5,
+                    "order": "desc"
+                  }
+                }
+              ],
+              "style": {
+                "palette": "datadog16"
+              },
+              "response_format": "scalar",
+              "queries": [
+                {
+                  "search": {
+                    "query": "$Namespace $Domain $Country"
+                  },
+                  "data_source": "logs",
+                  "compute": {
+                    "aggregation": "count"
+                  },
+                  "name": "a",
+                  "indexes": [
+                    "*"
+                  ],
+                  "group_by": [
+                    {
+                      "facet": "@namespace",
+                      "sort": {
+                        "aggregation": "count",
+                        "order": "desc"
+                      },
+                      "limit": 30,
+                      "should_exclude_missing": true
+                    },
+                    {
+                      "facet": "@domain",
+                      "sort": {
+                        "aggregation": "count",
+                        "order": "desc"
+                      },
+                      "limit": 30,
+                      "should_exclude_missing": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "sunburst"
+        },
+        "layout": {
+          "x": 3,
+          "y": 0,
+          "width": 4,
+          "height": 3
+        }
+      },
+      {
+        "id": 6647885541989082,
+        "definition": {
+          "title": "Requests by Country",
+          "title_size": "16",
+          "title_align": "left",
+          "type": "geomap",
+          "requests": [
+            {
+              "formulas": [
+                {
+                  "formula": "query1",
+                  "limit": {
+                    "count": 10,
+                    "order": "desc"
+                  }
+                }
+              ],
+              "response_format": "scalar",
+              "queries": [
+                {
+                  "search": {
+                    "query": "$Namespace $Domain $Country"
+                  },
+                  "data_source": "logs",
+                  "compute": {
+                    "aggregation": "count"
+                  },
+                  "name": "query1",
+                  "indexes": [
+                    "*"
+                  ],
+                  "group_by": [
+                    {
+                      "facet": "@country",
+                      "sort": {
+                        "aggregation": "count",
+                        "order": "desc"
+                      },
+                      "limit": 10
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "style": {
+            "palette": "hostmap_blues",
+            "palette_flip": false
+          },
+          "view": {
+            "focus": "WORLD"
+          }
+        },
+        "layout": {
+          "x": 7,
+          "y": 0,
+          "width": 5,
+          "height": 3
+        }
+      },
+      {
+        "id": 786611361983618,
+        "definition": {
+          "title": "Requests",
+          "title_size": "16",
+          "title_align": "left",
+          "show_legend": true,
+          "legend_layout": "auto",
+          "legend_columns": [
+            "avg",
+            "min",
+            "max",
+            "value",
+            "sum"
+          ],
+          "type": "timeseries",
+          "requests": [
+            {
+              "formulas": [
+                {
+                  "formula": "a"
+                }
+              ],
+              "response_format": "timeseries",
+              "queries": [
+                {
+                  "search": {
+                    "query": "$Namespace $Domain $Country"
+                  },
+                  "data_source": "logs",
+                  "compute": {
+                    "aggregation": "count"
+                  },
+                  "name": "a",
+                  "indexes": [
+                    "*"
+                  ],
+                  "group_by": [
+                    {
+                      "facet": "@rsp_code_class",
+                      "sort": {
+                        "aggregation": "count",
+                        "order": "desc"
+                      },
+                      "limit": 100
+                    }
+                  ]
+                }
+              ],
+              "style": {
+                "palette": "dog_classic",
+                "line_width": "normal"
+              },
+              "display_type": "bars"
+            }
+          ],
+          "yaxis": {
+            "include_zero": false
+          }
+        },
+        "layout": {
+          "x": 0,
+          "y": 3,
+          "width": 12,
+          "height": 3
+        }
+      },
+      {
+        "id": 6724062195487841,
+        "definition": {
+          "title": "Log Events",
+          "title_size": "16",
+          "title_align": "left",
+          "requests": [
+            {
+              "query": {
+                "query_string": "$Namespace $Domain $Country",
+                "sort": {
+                  "column": "timestamp",
+                  "order": "desc"
+                },
+                "data_source": "logs_stream",
+                "storage": "hot",
+                "indexes": []
+              },
+              "response_format": "event_list",
+              "columns": [
+                {
+                  "field": "status_line",
+                  "width": "auto"
+                },
+                {
+                  "field": "timestamp",
+                  "width": "auto"
+                },
+                {
+                  "field": "status",
+                  "width": "auto"
+                },
+                {
+                  "field": "@src_ip",
+                  "width": "auto"
+                },
+                {
+                  "field": "@dst_site",
+                  "width": "auto"
+                },
+                {
+                  "field": "@dst_instance",
+                  "width": "auto"
+                },
+                {
+                  "field": "@domain",
+                  "width": "auto"
+                },
+                {
+                  "field": "@method",
+                  "width": "auto"
+                },
+                {
+                  "field": "@req_size",
+                  "width": "auto"
+                },
+                {
+                  "field": "@rsp_size",
+                  "width": "auto"
+                },
+                {
+                  "field": "@path",
+                  "width": "auto"
+                },
+                {
+                  "field": "@connection_state",
+                  "width": "auto"
+                },
+                {
+                  "field": "@namespace",
+                  "width": "auto"
+                }
+              ]
+            }
+          ],
+          "type": "list_stream"
+        },
+        "layout": {
+          "x": 0,
+          "y": 6,
+          "width": 12,
+          "height": 4
+        }
+      }
+    ],
+    "template_variables": [
+      {
+        "name": "Namespace",
+        "prefix": "@namespace",
+        "available_values": [],
+        "default": "*"
+      },
+      {
+        "name": "Domain",
+        "prefix": "@domain",
+        "available_values": [],
+        "default": "*"
+      },
+      {
+        "name": "Country",
+        "prefix": "@country",
+        "available_values": [],
+        "default": "*"
+      }
+    ],
+    "layout_type": "ordered",
+    "is_read_only": false,
+    "notify_list": [],
+    "template_variable_presets": [
+      {
+        "name": "default",
+        "template_variables": []
+      }
+    ],
+    "reflow_type": "fixed",
+    "id": "i9a-m66-8cz"
+  }

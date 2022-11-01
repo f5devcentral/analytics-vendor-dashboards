@@ -6,7 +6,7 @@
         "id": 3363713706766908,
         "definition": {
           "type": "image",
-          "url": "https://github.com/f5devcentral/analytics-vendor-dashboards/raw/main/datadog/F5%20XC/dashboards/xcac.png",
+          "url": "https://github.com/f5devcentral/analytics-vendor-dashboards/raw/main/datadog/xcac.png",
           "sizing": "contain",
           "margin": "lg",
           "has_background": true,

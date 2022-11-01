@@ -129,7 +129,7 @@
 			"options": {
 				"query": "index=* req_id=* sec_event_name=* namespace=\"$namespace_token$\"domain=* | table domain | dedup domain",
 				"queryParameters": {
-					"earliest": "-7d@h",
+					"earliest": "-24h@h",
 					"latest": "now"
 				}
 			},
@@ -203,7 +203,7 @@
 			"title": "",
 			"options": {
 				"token": "field1",
-				"defaultValue": "-24h@h,now"
+				"defaultValue": "-4h@h,now"
 			}
 		},
 		"input_2": {

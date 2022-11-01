@@ -11,7 +11,7 @@
           "margin": "lg",
           "has_background": true,
           "has_border": false,
-          "vertical_align": "top",
+          "vertical_align": "tfop",
           "horizontal_align": "center"
         },
         "layout": {

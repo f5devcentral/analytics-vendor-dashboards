@@ -58,7 +58,7 @@
             "crossComponentResources": [
               "{Subscription}"
             ],
-            "value": "/subscriptions/187fa2f3-5d57-4e6a-9b1b-f92ba7adbf42/resourceGroups/glc-logs/providers/Microsoft.OperationalInsights/workspaces/glc-adcpm",
+            "value": "/subscriptions/fbc271e9-dbe3-4cce-bd65-1107e4a10283/resourceGroups/danf5access/providers/Microsoft.OperationalInsights/workspaces/F5DemoLAW",
             "typeSettings": {
               "additionalResourceOptions": []
             },
@@ -80,7 +80,7 @@
             "crossComponentResources": [
               "{Workspace}"
             ],
-            "value": "bigip.azure.glcmerg.f5vmss1.com",
+            "value": "bigip02.local",
             "typeSettings": {
               "additionalResourceOptions": []
             },
@@ -94,7 +94,7 @@
             "type": 4,
             "isRequired": true,
             "value": {
-              "durationMs": 3600000
+              "durationMs": 86400000
             },
             "typeSettings": {
               "selectableValues": [
@@ -677,9 +677,6 @@
         "size": 0,
         "aggregation": 2,
         "title": "BIG-IP CPU % Over Time",
-        "timeContext": {
-          "durationMs": 3600000
-        },
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -707,9 +704,6 @@
         "size": 0,
         "aggregation": 2,
         "title": "BIG-IP CPU(%) per Core",
-        "timeContext": {
-          "durationMs": 3600000
-        },
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -744,10 +738,6 @@
               "label": "CPU ID"
             },
             {
-              "columnId": "TimeGenerated",
-              "label": ""
-            },
-            {
               "columnId": "CPU_Usage_per_CPU_ID",
               "label": "Usage (%)"
             }
@@ -773,9 +763,6 @@
         "aggregation": 2,
         "title": "BIG-IP Memory Utlilzation (%)",
         "color": "green",
-        "timeContext": {
-          "durationMs": 3600000
-        },
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -809,9 +796,6 @@
         "aggregation": 2,
         "title": "Disk Capacity(%)  and Size by Volume",
         "color": "green",
-        "timeContext": {
-          "durationMs": 3600000
-        },
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1057,56 +1041,32 @@
           ],
           "labelSettings": [
             {
-              "columnId": "User"
-            },
-            {
               "columnId": "UserSize",
               "label": "User Vol"
-            },
-            {
-              "columnId": "Shared"
             },
             {
               "columnId": "SharedSize",
               "label": "Shared Vol"
             },
             {
-              "columnId": "Var"
-            },
-            {
               "columnId": "VarSize",
               "label": "Var Vol"
-            },
-            {
-              "columnId": "AppData"
             },
             {
               "columnId": "AppDataSize",
               "label": "AppData Vol"
             },
             {
-              "columnId": "Config"
-            },
-            {
               "columnId": "ConfigSize",
               "label": "Config Vol"
-            },
-            {
-              "columnId": "Dev"
             },
             {
               "columnId": "DevSize",
               "label": "Dev Vol"
             },
             {
-              "columnId": "DevShm"
-            },
-            {
               "columnId": "DevShmSize",
               "label": "DevShm Vol"
-            },
-            {
-              "columnId": "Run"
             },
             {
               "columnId": "RunSize",
@@ -1163,7 +1123,7 @@
                   "crossComponentResources": [
                     "{Workspace}"
                   ],
-                  "value": null,
+                  "value": "1.1",
                   "typeSettings": {
                     "additionalResourceOptions": []
                   },
@@ -1188,9 +1148,6 @@
               "query": "F5Telemetry_AVR_CL\r\n| where Entity_s in ('InterfaceTraffic', 'InterfaceHealth')\r\n| where hostname_s == '{HostName}'\r\n| where interface_name_s == '{Interface}'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| extend drop_pkts = todouble(counters_drops_in_s) + todouble(counters_drops_out_s)\r\n| extend err_pkts = todouble(counters_errors_in_s) + todouble(counters_errors_out_s)\r\n| summarize max(toint(counters_pkts_in_s)), max(toint(counters_pkts_out_s)) , max(drop_pkts) , max(err_pkts) by interface_name_s, bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n\r\n\r\n",
               "size": 0,
               "aggregation": 3,
-              "timeContext": {
-                "durationMs": 3600000
-              },
               "timeContextFromParameter": "TimeRange",
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1252,9 +1209,6 @@
         "aggregation": 2,
         "title": "Transactions per Second (TPS)",
         "color": "blueDark",
-        "timeContext": {
-          "durationMs": 3600000
-        },
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1285,9 +1239,6 @@
         "size": 0,
         "aggregation": 2,
         "title": "KBs In & KBs Out",
-        "timeContext": {
-          "durationMs": 3600000
-        },
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1303,14 +1254,11 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "F5Telemetry_AVR_CL\r\n| where Entity_s == 'TCP'\r\n| where hostname_s == '{HostName}'\r\n| where RequestSide_s == 'Server-side'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize Connections_Opened = max(todouble(ConnStatsNumStarts_s)), Connections_Closed = max(todouble(ConnStatsNumEndings_s)) by bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n",
+        "query": "F5Telemetry_AVR_CL\r\n| where Entity_s == 'DeviceTraffic'\r\n| where hostname_s == '{HostName}'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize ServerConns = max(todouble(server_conns_s)) by bin (TimeGenerated, {SampleValue}{SamplePeriod})",
         "size": 0,
         "aggregation": 2,
         "showAnnotations": true,
-        "title": "Server-side  TCP Connections",
-        "timeContext": {
-          "durationMs": 3600000
-        },
+        "title": "Server-side Connections",
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1327,14 +1275,11 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "F5Telemetry_AVR_CL\r\n| where Entity_s == 'TCP'\r\n| where hostname_s == '{HostName}'\r\n| where RequestSide_s == 'Client-side'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize Connections_Opened = max(todouble(ConnStatsNumStarts_s)), Connections_Closed = max(todouble(ConnStatsNumEndings_s)) by bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n",
+        "query": "F5Telemetry_AVR_CL\r\n| where Entity_s == 'DeviceTraffic'\r\n| where hostname_s == '{HostName}'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize ClientConns = max(todouble(client_conns_s)) by bin (TimeGenerated, {SampleValue}{SamplePeriod})",
         "size": 0,
         "aggregation": 2,
         "showAnnotations": true,
-        "title": "Client side TCP Connections",
-        "timeContext": {
-          "durationMs": 3600000
-        },
+        "title": "Client side Connections",
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1368,13 +1313,10 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "F5Telemetry_AVR_CL \r\n| where Entity_s == 'TCP'\r\n| where hostname_s == '{HostName}'\r\n| where RequestSide_s == 'Server-side'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize PacketsSent = avg(toint(PktsSent_s)), PacketsReceived = avg(toint(PktsRecv_s)), PacketsLost = avg(toint(PktsLost_s)) by bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n\r\n\r\n",
+        "query": "F5Telemetry_AVR_CL \r\n| where Entity_s == 'DeviceTraffic'\r\n| where hostname_s == '{HostName}'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize PacketsSent = avg(toint(server_pkts_out_s)), PacketsReceived = avg(toint(server_pkts_in_s)) by bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n",
         "size": 0,
         "aggregation": 2,
-        "title": "Server-side  TCP Packets Sent, Received, Lost",
-        "timeContext": {
-          "durationMs": 3600000
-        },
+        "title": "Server-side Packets",
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1406,13 +1348,10 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "F5Telemetry_AVR_CL \r\n| where Entity_s == 'TCP'\r\n| where hostname_s == '{HostName}'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| where RequestSide_s == 'Client-side'\r\n| summarize PacketsSent = max(toint(PktsSent_s)), PacketsReceived = max(toint(PktsRecv_s)), PacketsLost = max(toint(PktsLost_s)) by bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n| render areachart\r\n\r\n",
+        "query": "F5Telemetry_AVR_CL \r\n| where Entity_s == 'DeviceTraffic'\r\n| where hostname_s == '{HostName}'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize PacketsSent = max(toint(client_pkts_out_s)), PacketsReceived = max(toint(client_pkts_in_s)) by bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n| render areachart\r\n",
         "size": 0,
         "aggregation": 2,
-        "title": "Client-side  TCP Packets Sent, Received, Lost",
-        "timeContext": {
-          "durationMs": 3600000
-        },
+        "title": "Client-side Packets",
         "timeContextFromParameter": "TimeRange",
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1442,7 +1381,7 @@
     }
   ],
   "fallbackResourceIds": [
-    "/subscriptions/187fa2f3-5d57-4e6a-9b1b-f92ba7adbf42/resourceGroups/glc-logs/providers/Microsoft.OperationalInsights/workspaces/glc-adcpm"
+    "/subscriptions/fbc271e9-dbe3-4cce-bd65-1107e4a10283/resourcegroups/danf5access/providers/microsoft.operationalinsights/workspaces/f5demolaw"
   ],
   "fromTemplateId": "sentinel-F5BIGIPSystemMetrics",
   "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"

@@ -1,4 +1,4 @@
-<form theme="light">
+<form theme="light" version="1.1">
   <label>F5 BIG-IP System Metrics</label>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="time_token" searchWhenChanged="true">
@@ -14,7 +14,7 @@
       <fieldForLabel>hostname</fieldForLabel>
       <fieldForValue>hostname</fieldForValue>
       <search>
-        <query>sourcetype="f5:telemetry:json" source="f5:bigip:avr" | table hostname | dedup hostname</query>
+        <query>index=* source="f5.telemetry" telemetryEventCategory=AVR | table hostname | dedup hostname</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
@@ -26,7 +26,7 @@
       <fieldForLabel>Interface</fieldForLabel>
       <fieldForValue>Interface</fieldForValue>
       <search>
-        <query>source="f5:bigip:avr" hostname="$host_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") (interface_name="1.*" OR intferface_name="2.*" OR interface_name="mgmt") | rename interface_name as Interface | table Interface | dedup Interface</query>
+        <query>index=* source="f5.telemetry" hostname="$host_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") (interface_name="1.*" OR intferface_name="2.*" OR interface_name="mgmt") | rename interface_name as Interface | table Interface | dedup Interface</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
@@ -38,22 +38,12 @@
       <title>System Details</title>
       <table>
         <search>
-          <query>sourcetype="f5:telemetry:json" source="f5:bigip:system" host="$host_token$" | rename host as Host, system.version as Build, system.licenseReady as Licensed?, system.marketingName as Platform, system.syncMode as Mode, system.failoverStatus as Status, system.provisioning.ltm.level as LTM, system.provisioning.gtm.level as DNS, system.provisioning.afm.level as AFM, system.provisioning.apm.level as APM, system.provisioning.asm.level as ASM, system.provisioning.avr.level as AVR | table Host, Status, Build, Licensed?, Platform, Mode, LTM, ASM, APM, AVR, AFM, DNS | dedup Host</query>
+          <query>index=* source="f5.telemetry" system.failoverStatus=* system.hostname=$host_token$ | rename system.hostname as Host, system.version as Build, system.licenseReady as Licensed?, system.marketingName as Platform, system.syncMode as Mode, system.failoverStatus as Status, system.provisioning.ltm.level as LTM, system.provisioning.gtm.level as DNS, system.provisioning.afm.level as AFM, system.provisioning.apm.level as APM, system.provisioning.asm.level as ASM, system.provisioning.avr.level as AVR | table Host, Status, Build, Licensed?, Platform, Mode, LTM, ASM, APM, AVR, AFM, DNS | dedup Host</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
-        <option name="count">20</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="drilldown">row</option>
-        <option name="percentagesRow">false</option>
+        <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
-        <option name="rowNumbers">false</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
-        <drilldown>
-          <link target="_blank">search?q=index%3D%22f5_index%22%20sourcetype%3D%22f5%3Atelemetry%3Ajson%22%20source%3D%22f5%3Abigip%3Asystem%22%20host%3D%22$host_token$%22&amp;earliest=$time_token.earliest$&amp;latest=$time_token.latest$</link>
-        </drilldown>
       </table>
     </panel>
   </row>
@@ -62,7 +52,7 @@
       <title>BIG-IP CPU % Over Time</title>
       <chart>
         <search>
-          <query>source="f5:bigip:avr" Entity="SystemMonitor" hostname="$host_token$" | eval CPU% = MaxCpu/100 | timechart span=1h max(CPU%) by hostname</query>
+          <query>index=* source="f5.telemetry" telemetryEventCategory=AVR Entity="SystemMonitor" hostname="$host_token$" | eval CPU% = MaxCpu/100 | timechart span=1h max(CPU%) by hostname</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -107,7 +97,7 @@
       <title>Control Plane CPU(%) per Core</title>
       <chart>
         <search>
-          <query>source="f5:bigip:avr" Entity="CpuStat" hostname="$host_token$"  | eval CPU_Usage_per_CPU_ID = system/100 | timechart span=1h max(CPU_Usage_per_CPU_ID) by cpu_id</query>
+          <query>index=* source="f5.telemetry" telemetryEventCategory=AVR Entity="CpuStat" hostname="$host_token$"  | eval CPU_Usage_per_CPU_ID = system/100 | timechart span=1h max(CPU_Usage_per_CPU_ID) by cpu_id</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -153,7 +143,7 @@
       <title>BIG-IP Memory Utlilzation (%)</title>
       <chart>
         <search>
-          <query>source="f5:bigip:avr" Entity="SystemMonitor" hostname="$host_token$" | eval Memory% = MaxMemory/100 | timechart span=1h max(Memory%) by hostname</query>
+          <query>index=* source="f5.telemetry" telemetryEventCategory=AVR Entity="SystemMonitor" hostname="$host_token$" | eval Memory% = MaxMemory/100 | timechart span=1h max(Memory%) by hostname</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -199,7 +189,7 @@
       <title>Network Interface Metrics.    -      $interface_token$ interface</title>
       <chart>
         <search>
-          <query>source="f5:bigip:avr" hostname="$host_token$" interface_name="$interface_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") | eval Dropped_Packets = counters_drops_in + counters_drops_out, Packet_Errors = counters_errors_in + counters_errors_out, Packets_In = counters_pkts_in, Packets_Out = counters_pkts_out | timechart span=1h max(Packets_In) as Packets_In, max(Packets_Out) as Packets_Out by hostname</query>
+          <query>index=* source="f5.telemetry" telemetryEventCategory=AVR hostname="$host_token$" interface_name="$interface_token$" (Entity="InterfaceTraffic" OR Entity="InterfaceHealth") | eval Dropped_Packets = counters_drops_in + counters_drops_out, Packet_Errors = counters_errors_in + counters_errors_out, Packets_In = counters_pkts_in, Packets_Out = counters_pkts_out | timechart span=1h max(Packets_In) as Packets_In, max(Packets_Out) as Packets_Out by hostname</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -221,7 +211,7 @@
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.nullValueMode">connect</option>
         <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
@@ -246,7 +236,7 @@
       <title>Transactions per Second (TPS)</title>
       <chart>
         <search>
-          <query>sourcetype="f5:telemetry:json" source="f5:bigip:avr" transactions&gt;= 0 (pool_name=* OR Entity='DeviceTraffic') |rename transactions as Transactions_Per_Second | timechart max(Transactions_Per_Second) by pool_name</query>
+          <query>index=* source="f5.telemetry" telemetryEventCategory=AVR transactions&gt;= 0 (pool_name=* OR Entity='DeviceTraffic') |rename transactions as Transactions_Per_Second | timechart max(Transactions_Per_Second) by pool_name</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -264,11 +254,11 @@
         <option name="charting.axisY2.abbreviation">none</option>
         <option name="charting.axisY2.enabled">0</option>
         <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">column</option>
+        <option name="charting.chart">line</option>
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.nullValueMode">connect</option>
         <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
@@ -287,10 +277,10 @@
       </chart>
     </panel>
     <panel>
-      <title>Bytes In &amp; Bytes out</title>
+      <title>Bits In/Out</title>
       <chart>
         <search>
-          <query>| from datamodel: "Network_Traffic" | where host="$host_token$"  | eval KBsOut = bytes_out/1024, KBsIn = bytes_in/1024 | timechart max(KBsOut), max(KBsIn) by pool_name</query>
+          <query>index=* source="f5.telemetry" system.hostname=$host_token$ system.tmmTraffic.serverSideTraffic.bitsOut=* | rename system.hostname as Host | timechart  max(system.tmmTraffic.clientSideTraffic.bitsIn) as clientBitsIn, max(system.tmmTraffic.clientSideTraffic.bitsOut) as clientBitsOut, max(system.tmmTraffic.serverSideTraffic.bitsIn) as serverBitsIn, max(system.tmmTraffic.serverSideTraffic.bitsOut) as serverBitsOut</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -298,10 +288,12 @@
         <option name="charting.axisTitleX.visibility">collapsed</option>
         <option name="charting.axisTitleY.text">Bytes</option>
         <option name="charting.axisY.abbreviation">auto</option>
-        <option name="charting.chart">column</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
         <option name="charting.chart.stackMode">stacked</option>
         <option name="charting.drilldown">none</option>
         <option name="charting.legend.placement">top</option>
+        <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
   </row>

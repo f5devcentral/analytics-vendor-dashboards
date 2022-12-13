@@ -1,4 +1,4 @@
-<form theme="light">
+<form theme="light" version="1.1">
   <label>F5 BIG-IP Advanced WAF Insights</label>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="time_token">
@@ -26,7 +26,7 @@
       <title>Attack Summary</title>
       <chart>
         <search>
-          <query>telemetryEventCategory=ASM attack_type=* request_status="blocked" hostname="$host_token$"| rename request_status as Status, hostname as Host, attack_type as Attack_Type | chart count(Status) by Attack_Type Host | sort Status</query>
+          <query>index=* telemetryEventCategory=ASM attack_type=* request_status="blocked" hostname=$host_token$ | rename request_status as Status, hostname as Host, attack_type as Attack_Type | chart count(Status) by Attack_Type Host | sort Status</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -70,7 +70,7 @@
       <title>Attacks by Country</title>
       <map>
         <search>
-          <query>telemetryEventCategory=ASM  attack_type=* hostname="$host_token$" | rename reqyest_status as Status, hostname as Host, attack_type as Attack_Type, ip_client as clientip | iplocation clientip | stats count by Country | sort Country | geom geo_countries allFeatures=True featureIdField=Country</query>
+          <query>index=* telemetryEventCategory=ASM  attack_type=* request_status="blocked" hostname="$host_token$" | rename request_status as Status, hostname as Host, attack_type as Attack_Type, ip_client as clientip | iplocation clientip | stats count by Country | sort Country | geom geo_countries allFeatures=True featureIdField=Country</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -109,7 +109,7 @@
       <title>Recent Violations</title>
       <table>
         <search>
-          <query>telemetryEventCategory=ASM attack_type=* request_status="blocked" hostname="$host_token$" | rename ip_client as Client_IP, req_status as Request_Status, hostname as Host, attack_type as Attack_Type, violations as Violation, support_id as Support_ID | table Host, Support_ID, Request_Status, Attack_Type, Violation, Client_IP| head 100</query>
+          <query>index=* telemetryEventCategory=ASM attack_type=* request_status="blocked" hostname="$host_token$" | rename ip_client as Client_IP, req_status as Request_Status, hostname as Host, attack_type as Attack_Type, violations as Violation, support_id as Support_ID | table Host, Support_ID, Request_Status, Attack_Type, Violation, Client_IP| head 100</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -118,6 +118,7 @@
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
         <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>

@@ -254,7 +254,7 @@
         <option name="charting.axisY2.abbreviation">none</option>
         <option name="charting.axisY2.enabled">0</option>
         <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">line</option>
+        <option name="charting.chart">column</option>
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
@@ -288,9 +288,9 @@
         <option name="charting.axisTitleX.visibility">collapsed</option>
         <option name="charting.axisTitleY.text">Bytes</option>
         <option name="charting.axisY.abbreviation">auto</option>
-        <option name="charting.chart">line</option>
+        <option name="charting.chart">column</option>
         <option name="charting.chart.nullValueMode">connect</option>
-        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.chart.stackMode">default</option>
         <option name="charting.drilldown">none</option>
         <option name="charting.legend.placement">top</option>
         <option name="refresh.display">progressbar</option>

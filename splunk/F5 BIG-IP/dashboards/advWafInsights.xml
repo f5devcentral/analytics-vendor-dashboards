@@ -14,7 +14,7 @@
       <fieldForLabel>hostname</fieldForLabel>
       <fieldForValue>hostname</fieldForValue>
       <search>
-        <query>sourcetype="f5:telemetry:json" telemetryEventCategory=ASM| table hostname | dedup hostname</query>
+        <query>index=* telemetryEventCategory=ASM| table hostname | dedup hostname</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>

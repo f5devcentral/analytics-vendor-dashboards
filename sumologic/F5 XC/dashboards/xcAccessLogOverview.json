@@ -25,15 +25,19 @@
             },
             {
                 "key": "panelPANE-18CBD5F198800B46",
-                "structure": "{\"height\":7,\"width\":12,\"x\":11,\"y\":5}"
+                "structure": "{\"height\":8,\"width\":8,\"x\":8,\"y\":5}"
             },
             {
                 "key": "panelPANE-71B836069AFEBB4D",
-                "structure": "{\"height\":7,\"width\":11,\"x\":0,\"y\":5}"
+                "structure": "{\"height\":6,\"width\":5,\"x\":0,\"y\":5}"
             },
             {
                 "key": "panelPANE-1E23A3E4A41B6B4D",
-                "structure": "{\"height\":5,\"width\":24,\"x\":0,\"y\":12}"
+                "structure": "{\"height\":5,\"width\":24,\"x\":0,\"y\":13}"
+            },
+            {
+                "key": "panelBF395CB0B0BFF94F",
+                "structure": "{\"height\":8,\"width\":8,\"x\":16,\"y\":5}"
             }
         ]
     },
@@ -95,14 +99,14 @@
         {
             "id": null,
             "key": "panelPANE-71B836069AFEBB4D",
-            "title": "Requests by Domain",
-            "visualSettings": "{\"general\":{\"mode\":\"distribution\",\"type\":\"pie\",\"displayType\":\"default\",\"fillOpacity\":1,\"startAngle\":270,\"innerRadius\":\"30%\",\"maxNumOfSlices\":10},\"title\":{\"fontSize\":14},\"axes\":{\"axisX\":{\"titleFontSize\":12,\"labelFontSize\":12},\"axisY\":{\"titleFontSize\":12,\"labelFontSize\":12}},\"series\":{},\"legend\":{\"enabled\":false}}",
+            "title": "Requests by Namespace",
+            "visualSettings": "{\"general\":{\"mode\":\"distribution\",\"type\":\"pie\",\"displayType\":\"default\",\"fillOpacity\":1,\"startAngle\":270,\"innerRadius\":\"30%\",\"maxNumOfSlices\":10},\"title\":{\"fontSize\":14},\"axes\":{\"axisX\":{\"titleFontSize\":12,\"labelFontSize\":12},\"axisY\":{\"titleFontSize\":12,\"labelFontSize\":12}},\"series\":{},\"legend\":{\"enabled\":false},\"color\":{\"family\":\"METRIC_DEFAULT\"}}",
             "keepVisualSettingsConsistentWithParent": true,
             "panelType": "SumoSearchPanel",
             "queries": [
                 {
                     "transient": false,
-                    "queryString": "req_id domain as Domain | where !isNull(req_id) | count by Domain",
+                    "queryString": "req_id namespace as Namespace | where !isNull(req_id) | count by Namespace",
                     "queryType": "Logs",
                     "queryKey": "A",
                     "metricsQueryMode": null,
@@ -130,6 +134,33 @@
                 {
                     "transient": false,
                     "queryString": "req_id | req_id as RequestID | src_ip as SourceIP | domain as Destination | time as DateTime | method as ReqMethod | browser_type as Browser | country as SrcCountry | count by DateTime, SourceIP, RequestID, ReqMethod, Browser, Destination, SrcCountry | fields DateTime, RequestID, SourceIP, Destination, ReqMethod, Browser, SrcCountry",
+                    "queryType": "Logs",
+                    "queryKey": "A",
+                    "metricsQueryMode": null,
+                    "metricsQueryData": null,
+                    "tracesQueryData": null,
+                    "spansQueryData": null,
+                    "parseMode": "Auto",
+                    "timeSource": "Message",
+                    "outputCardinalityLimit": 1000
+                }
+            ],
+            "description": "",
+            "timeRange": null,
+            "coloringRules": null,
+            "linkedDashboards": []
+        },
+        {
+            "id": null,
+            "key": "panelBF395CB0B0BFF94F",
+            "title": "Requests by Domain ",
+            "visualSettings": "{\"general\":{\"mode\":\"distribution\",\"type\":\"pie\",\"displayType\":\"default\",\"fillOpacity\":1,\"startAngle\":270,\"innerRadius\":\"30%\",\"maxNumOfSlices\":10},\"title\":{\"fontSize\":14},\"axes\":{\"axisX\":{\"titleFontSize\":12,\"labelFontSize\":12},\"axisY\":{\"titleFontSize\":12,\"labelFontSize\":12}},\"series\":{},\"legend\":{\"enabled\":false},\"color\":{\"family\":\"SET1\"}}",
+            "keepVisualSettingsConsistentWithParent": true,
+            "panelType": "SumoSearchPanel",
+            "queries": [
+                {
+                    "transient": false,
+                    "queryString": "req_id domain as Domain | where !isNull(req_id) | count by Domain",
                     "queryType": "Logs",
                     "queryKey": "A",
                     "metricsQueryMode": null,

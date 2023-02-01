@@ -1,0 +1,193 @@
+{
+  "name": "F5 XC Requests Overview",
+  "description": null,
+  "permissions": "PUBLIC_READ_WRITE",
+  "pages": [
+    {
+      "name": "test",
+      "description": null,
+      "widgets": [
+        {
+          "title": "Requests by Domain",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 4,
+            "height": 2
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.pie"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": true
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountId": 3782887,
+                "query": "SELECT count(req_id) FROM Log FACET domain WHERE namespace IN ({{selectNamespace}}) AND req_id IS NOT NULL"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Requests",
+          "layout": {
+            "column": 5,
+            "row": 1,
+            "width": 8,
+            "height": 2
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountId": 3782887,
+                "query": "SELECT count(*) FROM Log WHERE namespace in ({{selectNamespace}}) TIMESERIES "
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            },
+            "yAxisLeft": {
+              "zero": true
+            }
+          }
+        },
+        {
+          "title": "Requests by Response Code",
+          "layout": {
+            "column": 1,
+            "row": 3,
+            "width": 4,
+            "height": 2
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.pie"
+          },
+          "rawConfiguration": {
+            "colors": {
+              "seriesOverrides": [
+                {
+                  "color": "#20d53e",
+                  "seriesName": "2xx"
+                }
+              ]
+            },
+            "facet": {
+              "showOtherSeries": true
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountId": 3782887,
+                "query": "SELECT count(rsp_code_class) FROM Log FACET rsp_code_class WHERE namespace IN ({{selectNamespace}}) AND req_id IS NOT NULL"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Log Events",
+          "layout": {
+            "column": 5,
+            "row": 3,
+            "width": 8,
+            "height": 4
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "logger.log-table-widget"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 3782887,
+                "query": "SELECT req_id as RequestID, namespace as Namespace, domain as Domain, x_forwarded_for as XForwardedFor, method as ReqMethod , rsp_code as ResponseCode FROM Log WHERE namespace IN ({{selectNamespace}}) AND req_id IS NOT NULL"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Requests by Namespace",
+          "layout": {
+            "column": 1,
+            "row": 5,
+            "width": 4,
+            "height": 2
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.pie"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": true
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountId": 3782887,
+                "query": "SELECT count(req_id) FROM Log FACET namespace WHERE namespace in ({{selectNamespace}}) AND req_id IS NOT NULL"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "name": "selectNamespace",
+      "items": null,
+      "defaultValues": [
+        {
+          "value": {
+            "string": "*"
+          }
+        },
+        {
+          "value": {
+            "string": "g-coward"
+          }
+        }
+      ],
+      "nrqlQuery": {
+        "accountIds": [
+          3782887
+        ],
+        "query": "SELECT uniques(namespace) FROM Log WHERE namespace IS NOT NULL"
+      },
+      "title": "Namespace",
+      "type": "NRQL",
+      "isMultiSelection": true,
+      "replacementStrategy": "STRING"
+    }
+  ]
+}

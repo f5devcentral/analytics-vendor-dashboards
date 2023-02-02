@@ -167,7 +167,7 @@
       ],
       "nrqlQuery": {
         "accountIds": [
-          *
+          3782887
         ],
         "query": "SELECT uniques(namespace) FROM Log WHERE attack_types IS NOT NULL"
       },

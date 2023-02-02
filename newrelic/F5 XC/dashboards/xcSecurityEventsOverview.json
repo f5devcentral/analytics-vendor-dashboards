@@ -29,7 +29,7 @@
             "nrqlQueries": [
               {
                 "accountId": 3782887,
-                "query": "SELECT count(*) FROM Log FACET attack_types as Attack_Type WHERE namespace IN ({{selectNamespace}}) AND attack_types IS NOT NULL AND attack_types != '{}'"
+                "query": "SELECT count(*) FROM Log WITH position(attack_types, 'ATTACK_TYPE_') + 12 AS AttackBegin, position(attack_types, '\"}') AS AttackEnd, substring(attack_types, AttackBegin, AttackEnd - AttackBegin) as Attack WHERE namespace IN ({{selectNamespace}}) AND attack_types IS NOT NULL AND attack_types != '{}' FACET Attack"
               }
             ],
             "platformOptions": {
@@ -167,7 +167,7 @@
       ],
       "nrqlQuery": {
         "accountIds": [
-          3782887
+          *
         ],
         "query": "SELECT uniques(namespace) FROM Log WHERE attack_types IS NOT NULL"
       },

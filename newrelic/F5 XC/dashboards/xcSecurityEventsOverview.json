@@ -12,7 +12,7 @@
           "layout": {
             "column": 1,
             "row": 1,
-            "width": 5,
+            "width": 4,
             "height": 2
           },
           "linkedEntityGuids": null,
@@ -40,10 +40,10 @@
         {
           "title": "Attacks Over Time",
           "layout": {
-            "column": 6,
+            "column": 5,
             "row": 1,
-            "width": 7,
-            "height": 2
+            "width": 8,
+            "height": 3
           },
           "linkedEntityGuids": null,
           "visualization": {
@@ -75,7 +75,7 @@
           "layout": {
             "column": 1,
             "row": 3,
-            "width": 5,
+            "width": 4,
             "height": 2
           },
           "linkedEntityGuids": null,
@@ -101,12 +101,12 @@
           }
         },
         {
-          "title": "",
+          "title": "Log Events",
           "layout": {
-            "column": 6,
-            "row": 3,
-            "width": 7,
-            "height": 4
+            "column": 5,
+            "row": 4,
+            "width": 8,
+            "height": 3
           },
           "linkedEntityGuids": null,
           "visualization": {
@@ -116,7 +116,7 @@
             "nrqlQueries": [
               {
                 "accountId": 3782887,
-                "query": "SELECT req_id as RequestID, src_ip as SourceIP, domain as Destination, attack_types as AttackType, browser_type as Browser, action as WAFAction, country as SrcCountry FROM Log WHERE namespace IN ({{selectNamespace}}) AND attack_types IS NOT NULL "
+                "query": "SELECT req_id as RequestID, src_ip as SourceIP, domain as Destination, substring(attack_types, AttackBegin, AttackEnd - AttackBegin) as Attack, browser_type as Browser, action as WAFAction, country as SrcCountry FROM Log WITH position(attack_types, 'ATTACK_TYPE_') + 12 AS AttackBegin, position(attack_types, '\"}') AS AttackEnd WHERE namespace IN ({{selectNamespace}}) AND attack_types IS NOT NULL "
               }
             ]
           }
@@ -126,7 +126,7 @@
           "layout": {
             "column": 1,
             "row": 5,
-            "width": 5,
+            "width": 4,
             "height": 2
           },
           "linkedEntityGuids": null,

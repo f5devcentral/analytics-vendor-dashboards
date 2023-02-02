@@ -59,7 +59,7 @@
             "nrqlQueries": [
               {
                 "accountId": 3782887,
-                "query": "SELECT count(*) FROM Log WHERE namespace in ({{selectNamespace}}) AND attack_types IS NOT NULL TIMESERIES "
+                "query": "SELECT count(*) FROM Log WHERE namespace in ({{selectNamespace}}) AND attack_types IS NOT NULL TIMESERIES FACET namespace"
               }
             ],
             "platformOptions": {

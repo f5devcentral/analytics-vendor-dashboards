@@ -4,7 +4,7 @@
   "permissions": "PUBLIC_READ_WRITE",
   "pages": [
     {
-      "name": "test",
+      "name": "default",
       "description": null,
       "widgets": [
         {

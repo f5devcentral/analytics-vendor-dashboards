@@ -171,11 +171,6 @@
           "value": {
             "string": "*"
           }
-        },
-        {
-          "value": {
-            "string": "g-coward"
-          }
         }
       ],
       "nrqlQuery": {

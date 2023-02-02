@@ -98,7 +98,7 @@
             "queries": [
                 {
                     "transient": false,
-                    "queryString": "req_id | req_id as Request | src_ip as SourceIP | domain as Destination | time as DateTime | parse field=attack_types \"[{\\\"name\\\":\\\"ATTACK_TYPE_*\\\"}\" as AttackType | browser_type as Browser | action as WafAction | country as SrcCountry | WHERE sec_event_type=\"waf_sec_event\" AND Action=\"block\" | count by DateTime, SourceIP, Request, AttackType, WafAction, Browser, Destination, SrcCountry | fields DateTime, Request, SourceIP, Destination, AttackType, Browser, WafAction, SrcCountry",
+                    "queryString": "req_id | req_id as RequestID | src_ip as SourceIP | domain as Destination | time as DateTime | parse field=attack_types \"[{\\\"name\\\":\\\"ATTACK_TYPE_*\\\"}\" as AttackType | browser_type as Browser | action as WafAction | country as SrcCountry | WHERE sec_event_type=\"waf_sec_event\" AND Action=\"block\" | count by DateTime, SourceIP, RequestID, AttackType, WafAction, Browser, Destination, SrcCountry | fields DateTime, RequestID, SourceIP, Destination, AttackType, Browser, WafAction, SrcCountry",
                     "queryType": "Logs",
                     "queryKey": "A",
                     "metricsQueryMode": null,

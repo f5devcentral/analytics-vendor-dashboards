@@ -12,7 +12,7 @@
           "layout": {
             "column": 1,
             "row": 1,
-            "width": 4,
+            "width": 5,
             "height": 2
           },
           "linkedEntityGuids": null,
@@ -40,9 +40,9 @@
         {
           "title": "Attacks Over Time",
           "layout": {
-            "column": 5,
+            "column": 6,
             "row": 1,
-            "width": 8,
+            "width": 7,
             "height": 2
           },
           "linkedEntityGuids": null,
@@ -75,7 +75,7 @@
           "layout": {
             "column": 1,
             "row": 3,
-            "width": 4,
+            "width": 5,
             "height": 2
           },
           "linkedEntityGuids": null,
@@ -103,9 +103,9 @@
         {
           "title": "",
           "layout": {
-            "column": 5,
+            "column": 6,
             "row": 3,
-            "width": 8,
+            "width": 7,
             "height": 4
           },
           "linkedEntityGuids": null,
@@ -126,7 +126,7 @@
           "layout": {
             "column": 1,
             "row": 5,
-            "width": 4,
+            "width": 5,
             "height": 2
           },
           "linkedEntityGuids": null,

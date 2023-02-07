@@ -8,13 +8,7 @@
 	"My_System": {
 		"class": "Telemetry_System",
 		"systemPoller": {
-			"interval": 60,
-			"actions": [{
-				"includeData": {},
-                "locations": {
-                    "system": true
-                }
-            }]
+			"interval": 60
 		}
 	},
 	"My_Listener": {

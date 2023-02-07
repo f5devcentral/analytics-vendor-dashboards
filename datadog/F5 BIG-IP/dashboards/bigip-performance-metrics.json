@@ -27,7 +27,7 @@
 				}],
 				"response_format": "scalar",
 				"queries": [{
-					"query": "avg:MaxCpu{$hostname}",
+					"query": "avg:f5.bigip.MaxCpu{$hostname}",
 					"data_source": "metrics",
 					"name": "query1",
 					"aggregator": "last"
@@ -58,9 +58,8 @@
 					"formula": "query1 / 100"
 				}],
 				"response_format": "timeseries",
-				"on_right_yaxis": false,
 				"queries": [{
-					"query": "avg:MaxCpu{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.MaxCpu{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query1"
 				}],
@@ -108,7 +107,7 @@
 				}],
 				"response_format": "scalar",
 				"queries": [{
-					"query": "avg:AvgMemory{$hostname}",
+					"query": "avg:f5.bigip.AvgMemory{$hostname}",
 					"data_source": "metrics",
 					"name": "query1",
 					"aggregator": "last"
@@ -142,15 +141,14 @@
 					"formula": "query1 / 100"
 				}],
 				"response_format": "timeseries",
-				"on_right_yaxis": false,
 				"queries": [{
-					"query": "avg:AvgMemory{$hostname} by {hostname}",
-					"data_source": "metrics",
-					"name": "query1"
-				}, {
-					"query": "avg:system.tmmMemory{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.system.tmmMemory{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query2"
+				}, {
+					"query": "avg:f5.bigip.AvgMemory{$hostname} by {hostname}",
+					"data_source": "metrics",
+					"name": "query1"
 				}],
 				"style": {
 					"palette": "warm",
@@ -188,9 +186,8 @@
 					"formula": "query1"
 				}],
 				"response_format": "timeseries",
-				"on_right_yaxis": false,
 				"queries": [{
-					"query": "avg:transactions{$hostname AND pool_name NOT IN (/common/shared/telemetry,N/A)} by {hostname,pool_name}",
+					"query": "avg:f5.bigip.transactions{$hostname AND pool_name NOT IN (/common/shared/telemetry,N/A)} by {hostname,pool_name}",
 					"data_source": "metrics",
 					"name": "query1"
 				}],
@@ -241,21 +238,20 @@
 					"formula": "query4"
 				}],
 				"response_format": "timeseries",
-				"on_right_yaxis": false,
 				"queries": [{
-					"query": "avg:ClientPktsIn{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.ClientPktsIn{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query1"
 				}, {
-					"query": "avg:ClientPktsOut{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.ClientPktsOut{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query2"
 				}, {
-					"query": "avg:server_pkts_in{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.server_pkts_in{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query3"
 				}, {
-					"query": "avg:server_pkts_out{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.server_pkts_out{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query4"
 				}],
@@ -300,13 +296,12 @@
 					"formula": "query2"
 				}],
 				"response_format": "timeseries",
-				"on_right_yaxis": false,
 				"queries": [{
-					"query": "avg:ThroughputReqMaxPerSec{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.ThroughputReqMaxPerSec{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query1"
 				}, {
-					"query": "avg:ThroughputRespMaxPerSec{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.ThroughputRespMaxPerSec{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query2"
 				}],
@@ -352,11 +347,11 @@
 				}],
 				"response_format": "timeseries",
 				"queries": [{
-					"query": "avg:RTTMax{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.RTTMin{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query1"
 				}, {
-					"query": "avg:RTTMin{$hostname} by {hostname}",
+					"query": "avg:f5.bigip.RTTMax{$hostname} by {hostname}",
 					"data_source": "metrics",
 					"name": "query2"
 				}],
@@ -385,13 +380,12 @@
 	}],
 	"template_variables": [{
 		"name": "hostname",
-		"default": "*",
 		"prefix": "hostname",
-		"available_values": []
+		"available_values": [],
+		"default": "*"
 	}],
 	"layout_type": "ordered",
-	"is_read_only": false,
 	"notify_list": [],
 	"reflow_type": "fixed",
-	"id": "hjb-h3x-dsj"
+	"id": "wrk-yic-a68"
 }

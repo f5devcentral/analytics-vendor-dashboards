@@ -1,0 +1,379 @@
+{
+	"json_schema_version": "1.3",
+	"app_version": "2.2.5",
+	"qradar_version": "2021.6.0.20211220195207",
+	"exported_at": 1676557964964,
+	"parameters": {
+		"list": []
+	},
+	"items": {
+		"list": [{
+			"id": "31",
+			"uuid": "f1a826d5-3145-4e32-bb49-102aa5972040",
+			"name": "F5XC API Endpoints",
+			"description": "",
+			"view_definitions": {
+				"list": [{
+					"id": "38",
+					"name": "Charted",
+					"params": {
+						"series": [{
+							"querydata": {
+								"xAxis": "API endpoint (custom)",
+								"yAxis": "Count"
+							},
+							"x": [],
+							"y": [],
+							"type": "bar",
+							"orientation": "v",
+							"name": "Count"
+						}],
+						"plotlyLayout": {
+							"autosize": true,
+							"plot_bgcolor": "#152935",
+							"paper_bgcolor": "#152935",
+							"font": {
+								"color": "white"
+							},
+							"xaxis": {
+								"tickmode": "auto",
+								"type": "none"
+							},
+							"yaxis": {
+								"automargin": true,
+								"type": "none"
+							},
+							"hovermode": "closest",
+							"margin": {
+								"r": 10,
+								"t": 20,
+								"b": 40
+							},
+							"barmode": "group",
+							"legend": {
+								"orientation": "v"
+							},
+							"showlegend": true
+						},
+						"type": "bar",
+						"thresholds": {},
+						"useCustomRange": {},
+						"customRange": {},
+						"showTitle": true,
+						"showStatus": true
+					},
+					"localization_key": null
+				}]
+			},
+			"datasource": {
+				"type": "aql"
+			},
+			"query": {
+				"queryVal": "SELECT \"API endpoint\" AS 'API endpoint (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', COUNT(*) AS 'Count' from events where \"API endpoint\" IS NOT NULL AND logSourceId='70' GROUP BY \"API endpoint\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
+				"resultsLimit": 1000
+			},
+			"localization_key": null
+		}, {
+			"id": "32",
+			"uuid": "6fcd6c95-2f6c-416e-9513-9ca74eeb2abf",
+			"name": "F5XC Attack Types",
+			"description": "Attack Types",
+			"view_definitions": {
+				"list": [{
+					"id": "39",
+					"name": "Attack Types",
+					"params": {
+						"series": [{
+							"type": "pie",
+							"querydata": {
+								"xAxis": "attack_types (custom)",
+								"yAxis": "Count"
+							},
+							"textinfo": "percent",
+							"hoverinfo": "text+value"
+						}],
+						"plotlyLayout": {
+							"legend": {
+								"orientation": "v"
+							},
+							"showlegend": true
+						},
+						"type": "pie",
+						"thresholds": {},
+						"showTitle": true,
+						"showStatus": true
+					},
+					"localization_key": null
+				}]
+			},
+			"datasource": {
+				"type": "aql"
+			},
+			"query": {
+				"queryVal": "SELECT \"attack_types\" AS 'attack_types (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', COUNT(*) AS 'Count' from events where  \"attack_types\" IS NOT NULL AND logSourceId='70' GROUP BY \"attack_types\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
+				"resultsLimit": 1000
+			},
+			"localization_key": null
+		}, {
+			"id": "33",
+			"uuid": "834180d7-6e78-4560-a493-68696a2dcbdd",
+			"name": "F5XC Bot Types",
+			"description": "",
+			"view_definitions": {
+				"list": [{
+					"id": "40",
+					"name": "Bot Types",
+					"params": {
+						"series": [{
+							"type": "pie",
+							"querydata": {
+								"xAxis": "Bot Type (custom)",
+								"yAxis": "Count"
+							},
+							"textinfo": "percent",
+							"hoverinfo": "text+value"
+						}],
+						"plotlyLayout": {
+							"legend": {
+								"orientation": "v"
+							},
+							"showlegend": true
+						},
+						"type": "pie",
+						"thresholds": {},
+						"showTitle": true,
+						"showStatus": true
+					},
+					"localization_key": null
+				}]
+			},
+			"datasource": {
+				"type": "aql"
+			},
+			"query": {
+				"queryVal": "SELECT \"Bot Type\" AS 'Bot Type (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', COUNT(*) AS 'Count' from events where \"Bot Type\" IS NOT NULL AND logSourceId='70' GROUP BY \"Bot Type\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
+				"resultsLimit": 1000
+			},
+			"localization_key": null
+		}, {
+			"id": "34",
+			"uuid": "e81a8616-214f-4776-b86d-3daf8439826d",
+			"name": "F5XC Source Country",
+			"description": "",
+			"view_definitions": {
+				"list": [{
+					"id": "41",
+					"name": "Source Country",
+					"params": {
+						"series": [{
+							"type": "pie",
+							"querydata": {
+								"xAxis": "Source Country (custom)",
+								"yAxis": "Count"
+							},
+							"textinfo": "percent",
+							"hoverinfo": "text+value"
+						}],
+						"plotlyLayout": {
+							"geo": {
+								"scope": "world",
+								"projection": {
+									"type": "equirectangular",
+									"rotation": {
+										"lat": "",
+										"lon": ""
+									},
+									"scale": 1
+								},
+								"showcountries": true,
+								"showcoastlines": false,
+								"showland": true,
+								"showocean": true,
+								"showframe": false,
+								"showsubunits": true,
+								"center": {
+									"lon": 0,
+									"lat": 0
+								},
+								"lataxis": {
+									"showgrid": false,
+									"width": "1px"
+								},
+								"lonaxis": {
+									"showgrid": false,
+									"width": "1px"
+								},
+								"showlines": false
+							},
+							"margin": {
+								"l": 2,
+								"r": 2,
+								"t": 30,
+								"b": 2
+							},
+							"paper_bgcolor": "#152935",
+							"legend": {
+								"orientation": "v"
+							},
+							"showlegend": true
+						},
+						"type": "pie",
+						"thresholds": {},
+						"subType": "choropleth",
+						"showTitle": true,
+						"showStatus": true
+					},
+					"localization_key": null
+				}]
+			},
+			"datasource": {
+				"type": "aql"
+			},
+			"query": {
+				"queryVal": "SELECT \"Source Country\" AS 'Source Country (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', COUNT(*) AS 'Count' from events where ( \"Source Country\" IS NOT NULL AND logSourceId='70' ) GROUP BY \"Source Country\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes",
+				"resultsLimit": 1000
+			},
+			"localization_key": null
+		}, {
+			"id": "35",
+			"uuid": "2e9a01f9-10aa-4521-97e2-84228b36ef52",
+			"name": "F5XC Namespace",
+			"description": "",
+			"view_definitions": {
+				"list": [{
+					"id": "42",
+					"name": "Namespace",
+					"params": {
+						"series": [{
+							"type": "pie",
+							"querydata": {
+								"xAxis": "Namespace (custom)",
+								"yAxis": "Count"
+							},
+							"textinfo": "percent",
+							"hoverinfo": "text+value"
+						}],
+						"plotlyLayout": {
+							"legend": {
+								"orientation": "v"
+							},
+							"showlegend": true
+						},
+						"type": "pie",
+						"thresholds": {},
+						"showTitle": true,
+						"showStatus": true
+					},
+					"localization_key": null
+				}]
+			},
+			"datasource": {
+				"type": "aql"
+			},
+			"query": {
+				"queryVal": "SELECT \"Namespace\" AS 'Namespace (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', COUNT(*) AS 'Count' from events where ( \"Namespace\" IS NOT NULL AND logSourceId='70' ) GROUP BY \"Namespace\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
+				"resultsLimit": 1000
+			},
+			"localization_key": null
+		}]
+	},
+	"dashboards": {
+		"list": [{
+			"id": "6",
+			"uuid": "6412df3d-abc2-4295-94ba-cf80bccb0267",
+			"name": "F5 XC",
+			"type": 1,
+			"app_uuid": null,
+			"description": "",
+			"localization_key": null,
+			"views": {
+				"list": [{
+					"id": "34",
+					"params": {
+						"layout": {
+							"w": 7,
+							"h": 5,
+							"x": 0,
+							"y": 0,
+							"i": "34",
+							"moved": false,
+							"static": false
+						}
+					},
+					"type": "regular",
+					"view_definition": {
+						"id": "38"
+					}
+				}, {
+					"id": "35",
+					"params": {
+						"layout": {
+							"w": 7,
+							"h": 5,
+							"x": 7,
+							"y": 0,
+							"i": "35",
+							"moved": false,
+							"static": false
+						}
+					},
+					"type": "regular",
+					"view_definition": {
+						"id": "39"
+					}
+				}, {
+					"id": "36",
+					"params": {
+						"layout": {
+							"w": 7,
+							"h": 5,
+							"x": 0,
+							"y": 5,
+							"i": "36",
+							"moved": false,
+							"static": false
+						}
+					},
+					"type": "regular",
+					"view_definition": {
+						"id": "40"
+					}
+				}, {
+					"id": "37",
+					"params": {
+						"layout": {
+							"w": 7,
+							"h": 5,
+							"x": 7,
+							"y": 5,
+							"i": "37",
+							"moved": false,
+							"static": false
+						}
+					},
+					"type": "regular",
+					"view_definition": {
+						"id": "41"
+					}
+				}, {
+					"id": "38",
+					"params": {
+						"layout": {
+							"w": 7,
+							"h": 5,
+							"x": 0,
+							"y": 10,
+							"i": "38",
+							"moved": false,
+							"static": false
+						}
+					},
+					"type": "regular",
+					"view_definition": {
+						"id": "42"
+					}
+				}]
+			}
+		}]
+	}
+}

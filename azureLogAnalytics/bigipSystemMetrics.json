@@ -1235,7 +1235,7 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "F5Telemetry_AVR_CL\r\n| where Entity_s == 'globalThroughput'\r\n| where hostname_s == '{HostName}'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize KBsOUT = max(todouble(bytes_out_s)/1024), KBsIN = max(todouble(bytes_in_s)/1024) by hostname_s, bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n",
+        "query": "F5Telemetry_AVR_CL\r\n| where Entity_s == 'DeviceTraffic'\r\n| where hostname_s == '{HostName}'\r\n| where TimeGenerated between ({TimeRange:start}..{TimeRange:end})\r\n| summarize KBsOUT = max(todouble(server_bytes_out_s)/1024), KBsIN = max(todouble(server_bytes_in_s)/1024) by hostname_s, bin (TimeGenerated, {SampleValue}{SamplePeriod})\r\n",
         "size": 0,
         "aggregation": 2,
         "title": "KBs In & KBs Out",

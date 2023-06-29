@@ -69,7 +69,7 @@
 				"type": "aql"
 			},
 			"query": {
-				"queryVal": "SELECT \"API endpoint\" AS 'API endpoint (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', COUNT(*) AS 'Count' from events where \"API endpoint\" IS NOT NULL AND logSourceId='70' GROUP BY \"API endpoint\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
+				"queryVal": "SELECT \"API endpoint\" AS 'API endpoint (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', COUNT(*) AS 'Count' from events where \"API endpoint\" IS NOT NULL AND LOGSOURCETYPENAME(logsourceid)='F5XC' GROUP BY \"API endpoint\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
 				"resultsLimit": 1000
 			},
 			"localization_key": null
@@ -110,7 +110,7 @@
 				"type": "aql"
 			},
 			"query": {
-				"queryVal": "SELECT \"attack_types\" AS 'attack_types (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', COUNT(*) AS 'Count' from events where  \"attack_types\" IS NOT NULL AND logSourceId='70' GROUP BY \"attack_types\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
+				"queryVal": "SELECT \"attack_types\" AS 'attack_types (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', COUNT(*) AS 'Count' from events where  \"attack_types\" IS NOT NULL AND LOGSOURCETYPENAME(logsourceid)='F5XC' GROUP BY \"attack_types\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
 				"resultsLimit": 1000
 			},
 			"localization_key": null
@@ -151,7 +151,7 @@
 				"type": "aql"
 			},
 			"query": {
-				"queryVal": "SELECT \"Bot Type\" AS 'Bot Type (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', COUNT(*) AS 'Count' from events where \"Bot Type\" IS NOT NULL AND logSourceId='70' GROUP BY \"Bot Type\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
+				"queryVal": "SELECT \"Bot Type\" AS 'Bot Type (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', COUNT(*) AS 'Count' from events where \"Bot Type\" IS NOT NULL AND LOGSOURCETYPENAME(logsourceid)='F5XC' GROUP BY \"Bot Type\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
 				"resultsLimit": 1000
 			},
 			"localization_key": null
@@ -230,7 +230,7 @@
 				"type": "aql"
 			},
 			"query": {
-				"queryVal": "SELECT \"Source Country\" AS 'Source Country (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', COUNT(*) AS 'Count' from events where ( \"Source Country\" IS NOT NULL AND logSourceId='70' ) GROUP BY \"Source Country\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes",
+				"queryVal": "SELECT \"Source Country\" AS 'Source Country (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"Namespace\") AS 'Namespace (custom) (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', COUNT(*) AS 'Count' from events where ( \"Source Country\" IS NOT NULL AND LOGSOURCETYPENAME(logsourceid)='F5XC' ) GROUP BY \"Source Country\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes",
 				"resultsLimit": 1000
 			},
 			"localization_key": null
@@ -271,7 +271,7 @@
 				"type": "aql"
 			},
 			"query": {
-				"queryVal": "SELECT \"Namespace\" AS 'Namespace (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', COUNT(*) AS 'Count' from events where ( \"Namespace\" IS NOT NULL AND logSourceId='70' ) GROUP BY \"Namespace\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
+				"queryVal": "SELECT \"Namespace\" AS 'Namespace (custom)', UniqueCount(qid) AS 'Event Name (Unique Count)', SUM(\"eventCount\") AS 'Event Count (Sum)', MIN(\"startTime\") AS 'Start Time (Minimum)', UniqueCount(\"sourceIP\") AS 'Source IP (Unique Count)', UniqueCount(\"destinationIP\") AS 'Destination IP (Unique Count)', UniqueCount(\"waf_detections_action\") AS 'waf_detections_action (custom) (Unique Count)', UniqueCount(\"Source Country\") AS 'Source Country (custom) (Unique Count)', UniqueCount(\"attack_types\") AS 'attack_types (custom) (Unique Count)', COUNT(*) AS 'Count' from events where ( \"Namespace\" IS NOT NULL AND LOGSOURCETYPENAME(logsourceid)='F5XC' ) GROUP BY \"Namespace\" order by \"Count\" desc LIMIT 1000 last 2592000 minutes\r\n",
 				"resultsLimit": 1000
 			},
 			"localization_key": null

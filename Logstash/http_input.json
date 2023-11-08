@@ -1,0 +1,28 @@
+input {
+  http {
+    port => "5047"
+    additional_codecs => { "application/json" => "json_lines" }
+  }
+}
+
+filter {
+  json {
+    source => "message"
+  }
+}
+
+output {
+    elasticsearch {
+        data_stream => true
+        data_stream_type => "metrics"
+        data_stream_dataset => "f5"
+        data_stream_namespace => "prod"
+        data_stream_auto_routing => true
+        hosts => ["${ES_HOSTS}"]
+        codec => json
+        ssl => true
+        cacert => "/etc/logstash/certificates/ca.crt"
+        user => "${ES_USER}"
+        password => "${ES_PASSWORD}"
+	}
+}

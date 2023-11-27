@@ -1,0 +1,370 @@
+<form>
+  <label>BIG-IP Next Overview</label>
+  <fieldset submitButton="false">
+    <input type="time" token="dashtime">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="host_token" searchWhenChanged="true">
+      <label>BIG-IP Next Instance(s)</label>
+      <choice value="*">All Instances</choice>
+      <fieldForLabel>unit_hostname</fieldForLabel>
+      <fieldForValue>unit_hostname</fieldForValue>
+      <search>
+        <query>index=* | table unit_hostname | dedup unit_hostname</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Instance CPU Utilization (%)</title>
+      <chart>
+        <title>BIG-IP-Next.internal.node.cpuUsagePct</title>
+        <search>
+          <query>| mstats avg("BIG-IP-Next.internal.node.cpuUsagePct") prestats=true WHERE "index"=* system-id=$host_token$ span=10s
+| timechart avg("BIG-IP-Next.internal.node.cpuUsagePct") AS Avg span=10s
+| fields - _span*</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+        </search>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"Avg":"#1e93c6"}</option>
+        <option name="charting.fieldDashStyles">{"Avg":"solid"}</option>
+        <option name="charting.gridLinesX.showMajorLines">1</option>
+        <option name="charting.legend.mode">seriesCompare</option>
+        <option name="displayview">analytics_workspace</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Instance Memory Usage (%)</title>
+      <chart>
+        <search>
+          <query>| mstats avg("BIG-IP-Next.internal.node.memoryUsagePct") prestats=true WHERE "index"=* system-id=$host_token$ span=10s
+| timechart avg("BIG-IP-Next.internal.node.memoryUsagePct") AS Avg span=10s
+| fields - _span*</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+        </search>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"Avg":"#1e93c6"}</option>
+        <option name="charting.fieldDashStyles">{"Avg":"solid"}</option>
+        <option name="charting.gridLinesX.showMajorLines">1</option>
+        <option name="charting.legend.mode">seriesCompare</option>
+        <option name="displayview">analytics_workspace</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Connections</title>
+      <chart>
+        <search>
+          <query>| mstats avg("BIGIP-Next.tmm_stat.client_side_traffic.cur_conns") prestats=true WHERE "index"=* systemId=$host_token$ span=10s
+| timechart avg("BIGIP-Next.tmm_stat.client_side_traffic.cur_conns") AS Avg span=10s
+| fields - _span*</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+        </search>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"Avg":"#1e93c6"}</option>
+        <option name="charting.fieldDashStyles">{"Avg":"solid"}</option>
+        <option name="charting.gridLinesX.showMajorLines">1</option>
+        <option name="charting.legend.mode">seriesCompare</option>
+        <option name="displayview">analytics_workspace</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Packets In/Out</title>
+      <chart>
+        <search>
+          <query>| mstats avg("BIGIP-Next.interface_stat.counters.pkts_in"), avg("BIGIP-Next.interface_stat.counters.pkts_out") prestats=true WHERE "index"=* systemId=$host_token$ span=10s
+| timechart avg("BIGIP-Next.interface_stat.counters.pkts_in") AS AvgPktsIn, avg("BIGIP-Next.interface_stat.counters.pkts_out") AS AvgPktsOut span=10s
+| fields - _span*</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.axisY.includeZero">1</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"Avg":"#1e93c6"}</option>
+        <option name="charting.fieldDashStyles">{"Avg":"Solid"}</option>
+        <option name="charting.gridLinesX.showMajorLines">1</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">seriesCompare</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Total Requests</title>
+      <chart>
+        <search>
+          <query>| mstats avg("BIGIP-Next.pool_member_stat.tot_requests") prestats=true WHERE "index"=* systemId=$host_token$  span=10s
+| timechart avg("BIGIP-Next.pool_member_stat.tot_requests") AS Avg span=10s
+| fields - _span*</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+        </search>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"Avg":"#1e93c6"}</option>
+        <option name="charting.fieldDashStyles">{"Avg":"solid"}</option>
+        <option name="charting.gridLinesX.showMajorLines">1</option>
+        <option name="charting.legend.mode">seriesCompare</option>
+        <option name="displayview">analytics_workspace</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>WAF Attack Overview</title>
+      <chart>
+        <search>
+          <query>index=* attack_type=* request_status="blocked" unit_hostname=$host_token$ | rename request_status as Status, unit_hostname as Host, attack_type as Attack_Type | chart count(Status) by Attack_Type Host | sort Status</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3D*%20attack_type%3D*%20request_status%3D%22blocked%22%20unit_hostname%3D$host_token$%20%7C%20rename%20request_status%20as%20Status%2C%20unit_hostname%20as%20Host%2C%20attack_type%20as%20Attack_Type%20%7C%20chart%20count(Status)%20by%20Attack_Type%20Host%20%7C%20sort%20Status&amp;earliest=$dashtime.earliest$&amp;latest=$dashtime.latest$</link>
+        </drilldown>
+      </chart>
+    </panel>
+    <panel>
+      <title>Attacks by Country</title>
+      <map>
+        <search>
+          <query>index=* attack_type=* request_status="blocked" unit_hostname=$host_token$ | rename request_status as Status, unit_hostname as Host, attack_type as Attack_Type, ip_client as clientip | iplocation clientip | stats count by Country | sort Country | geom geo_countries allFeatures=True featureIdField=Country</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="mapping.choroplethLayer.colorBins">5</option>
+        <option name="mapping.choroplethLayer.colorMode">categorical</option>
+        <option name="mapping.choroplethLayer.maximumColor">0xaf575a</option>
+        <option name="mapping.choroplethLayer.minimumColor">0x62b3b2</option>
+        <option name="mapping.choroplethLayer.neutralPoint">0</option>
+        <option name="mapping.choroplethLayer.shapeOpacity">0.75</option>
+        <option name="mapping.choroplethLayer.showBorder">1</option>
+        <option name="mapping.data.maxClusters">100</option>
+        <option name="mapping.legend.placement">bottomright</option>
+        <option name="mapping.map.center">(44.21,-22.76)</option>
+        <option name="mapping.map.panning">1</option>
+        <option name="mapping.map.scrollZoom">0</option>
+        <option name="mapping.map.zoom">2</option>
+        <option name="mapping.markerLayer.markerMaxSize">50</option>
+        <option name="mapping.markerLayer.markerMinSize">10</option>
+        <option name="mapping.markerLayer.markerOpacity">0.8</option>
+        <option name="mapping.showTiles">1</option>
+        <option name="mapping.tileLayer.maxZoom">7</option>
+        <option name="mapping.tileLayer.minZoom">0</option>
+        <option name="mapping.tileLayer.tileOpacity">1</option>
+        <option name="mapping.type">choropleth</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Bot Category</title>
+      <chart>
+        <search>
+          <query>index=* bot_category=* unit_hostname=$host_token$ | rename request_status as Status, bot_category as BOT_Category | chart count(Status) by BOT_Category</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3D*%20bot_category%3D*%20unit_hostname%3D$host_token$%20%7C%20rename%20request_status%20as%20Status%2C%20bot_category%20as%20BOT_Category%20%7C%20chart%20count(Status)%20by%20BOT_Category&amp;earliest=$dashtime.earliest$&amp;latest=$dashtime.latest$</link>
+        </drilldown>
+      </chart>
+    </panel>
+    <panel>
+      <title>Bot Attack Signatures</title>
+      <chart>
+        <search>
+          <query>index=* bot_signature_name=* unit_hostname=$host_token$ | rename request_status as Status, bot_signature_name as BOT_Signature | chart count(Status) by BOT_Signature</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3D*%20bot_signature_name%3D*%20unit_hostname%3D$host_token$%20%7C%20rename%20request_status%20as%20Status%2C%20bot_signature_name%20as%20BOT_Signature%20%7C%20chart%20count(Status)%20by%20BOT_Signature&amp;earliest=$dashtime.earliest$&amp;latest=$dashtime.latest$</link>
+        </drilldown>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Recent Violations</title>
+      <table>
+        <search>
+          <query>index=* attack_type=* request_status="blocked" unit_hostname=$host_token$ | rename ip_client as Client_IP, request_status as Request_Status, unit_hostname as Host, attack_type as Attack_Type, violations as Violation, support_id as Support_ID | table Host, Support_ID, Request_Status, Attack_Type, Violation, Client_IP| head 100</query>
+          <earliest>$dashtime.earliest$</earliest>
+          <latest>$dashtime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</form>

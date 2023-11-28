@@ -144,11 +144,11 @@
       </chart>
     </panel>
     <panel>
-      <title>Total Requests</title>
+      <title>Dropped Packets</title>
       <chart>
         <search>
-          <query>| mstats avg("BIGIP-Next.pool_member_stat.tot_requests") prestats=true WHERE "index"=* systemId=$host_token$  span=10s
-| timechart avg("BIGIP-Next.pool_member_stat.tot_requests") AS Avg span=10s
+          <query>| mstats avg("BIGIP_Next.ip_stat.dropped") prestats=true WHERE "index"=* systemId=$host_token$  span=10s
+| timechart avg("BIGIP_Next.ip_stat.dropped") AS Avg span=10s
 | fields - _span*</query>
           <earliest>$dashtime.earliest$</earliest>
           <latest>$dashtime.latest$</latest>
@@ -223,7 +223,7 @@
           <latest>$dashtime.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
-        <option name="drilldown">none</option>
+        <option name="drilldown">all</option>
         <option name="mapping.choroplethLayer.colorBins">5</option>
         <option name="mapping.choroplethLayer.colorMode">categorical</option>
         <option name="mapping.choroplethLayer.maximumColor">0xaf575a</option>
@@ -245,10 +245,12 @@
         <option name="mapping.tileLayer.minZoom">0</option>
         <option name="mapping.tileLayer.tileOpacity">1</option>
         <option name="mapping.type">choropleth</option>
-        <option name="refresh.display">progressbar</option>
         <option name="trellis.enabled">0</option>
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3D*%20attack_type%3D*%20request_status%3D%22blocked%22%20unit_hostname%3D$host_token$%20%7C%20rename%20request_status%20as%20Status%2C%20unit_hostname%20as%20Host%2C%20attack_type%20as%20Attack_Type%2C%20ip_client%20as%20clientip%20%7C%20iplocation%20clientip%20%7C%20stats%20count%20by%20Country%20%7C%20sort%20Country%20%7C%20geom%20geo_countries%20allFeatures%3DTrue%20featureIdField%3DCountry&amp;earliest=$dashtime.earliest$&amp;latest=$dashtime.latest$</link>
+        </drilldown>
       </map>
     </panel>
   </row>

@@ -1,0 +1,56 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:55681"
+        tls:
+          cert_file: /etc/otelcol-contrib/collector.pem
+          key_file: /etc/otelcol-contrib/collector-key.pem
+          ca_file: /etc/otelcol-contrib/root-ca.pem
+      http:
+        endpoint: "0.0.0.0:55680"
+        tls:
+          cert_file: /etc/otelcol-contrib/collector.pem
+          key_file: /etc/otelcol-contrib/collector-key.pem
+          ca_file: /etc/otelcol-contrib/root-ca.pem
+
+exporters:
+  splunk_hec/metrics:
+    token: "XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    endpoint: "https://10.0.0.1:8088/services/collector"
+    source: "f5next"
+    sourcetype: "otel"
+    max_idle_conns: 200
+    disable_compression: false
+    timeout: 10s
+    tls:
+      insecure_skip_verify: true
+  splunk_hec/logs:
+    token: "XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    endpoint: "https://10.0.0.1:8088/services/collector"
+    source: "f5next"
+    sourcetype: "otel"
+    max_idle_conns: 200
+    disable_compression: false
+    timeout: 10s
+    tls:
+      insecure_skip_verify: true
+processors:
+  batch:
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [splunk_hec/metrics]
+      processors: [batch]
+    logs:
+      receivers: [otlp]
+      exporters: [splunk_hec/logs]
+      processors: [batch]

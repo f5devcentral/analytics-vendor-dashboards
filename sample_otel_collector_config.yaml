@@ -1,0 +1,68 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:55681"
+        tls:
+          cert_file: /etc/otelcol-contrib/collector.pem
+          key_file: /etc/otelcol-contrib/collector-key.pem
+          ca_file: /etc/otelcol-contrib/root-ca.pem
+      http:
+        endpoint: "0.0.0.0:55680"
+        tls:
+          cert_file: /etc/otelcol-contrib/collector.pem
+          key_file: /etc/otelcol-contrib/collector-key.pem
+          ca_file: /etc/otelcol-contrib/root-ca.pem
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    send_timestamps: true
+    const_labels:
+      metrics_source: f5_next
+  datadog:
+    api:
+      key: "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx"
+  splunk_hec/metrics:
+    token: "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx"
+    endpoint: "https://172.16.60.205:8088/services/collector"
+    source: "f5next_metrics"
+    sourcetype: "otel"
+    max_idle_conns: 200
+    disable_compression: false
+    timeout: 10s
+    tls:
+      insecure_skip_verify: true
+  splunk_hec/logs:
+    token: "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx"
+    endpoint: "https://172.16.60.205:8088/services/collector"
+    source: "f5next_logs"
+    sourcetype: "otel"
+    max_idle_conns: 200
+    disable_compression: false
+    timeout: 10s
+    tls:
+      insecure_skip_verify: true
+  sumologic/metrics:
+    endpoint: "https://endpoint6.collection.us2.sumologic.com/receiver/v1/http/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  sumologic/logs:
+    endpoint: "https://endpoint6.collection.us2.sumologic.com/receiver/v1/http/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+processors:
+  batch:
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus, datadog, splunk_hec/metrics, sumologic/metrics]
+      processors: [batch]
+    logs:
+      receivers: [otlp]
+      exporters: [datadog, splunk_hec/logs, sumologic/logs]
+      processors: [batch]

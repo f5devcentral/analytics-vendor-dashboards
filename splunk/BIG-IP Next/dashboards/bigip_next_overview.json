@@ -25,7 +25,6 @@
     <panel>
       <title>Instance CPU Utilization (%)</title>
       <chart>
-        <title>BIG-IP-Next.internal.node.cpuUsagePct</title>
         <search>
           <query>| mstats avg("BIG-IP-Next.internal.node.cpuUsagePct") prestats=true WHERE "index"=* system-id=$host_token$ span=10s
 | timechart avg("BIG-IP-Next.internal.node.cpuUsagePct") AS Avg span=10s

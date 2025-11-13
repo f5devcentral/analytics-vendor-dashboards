@@ -1,1 +1,278 @@
-
+{
+    "version": 20,
+    "variables": [
+        {
+            "version": 2,
+            "key": "BIGIP_Host",
+            "type": "query",
+            "visible": true,
+            "editable": true,
+            "input": "fetch logs\n| fields system.hostname, telemetryeventcategory\n| filterout isNull(system.hostname)\n| summarize distincthosts = collectDistinct(system.hostname)\n| expand distincthosts\n| sort distincthosts",
+            "multiple": false
+        }
+    ],
+    "tiles": {
+        "0": {
+            "title": "BIG-IP Systems Overview",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| filter isNotNull(system.hostname)\n| fields timestamp, system.hostname, system.licenseready, system.configready, system.marketingname, system.failoverstatus, system.provisioning.ltm.level, system.provisioning.gtm.level, system.provisioning.afm.level, system.provisioning.apm.level, system.provisioning.asm.level, system.provisioning.avr.level\n| fieldsRename Hostname=system.hostname, Licensed=system.licenseready, ConfigReady=system.configready, Model=system.marketingname, FailoverStatus=system.failoverstatus, LTM=system.provisioning.ltm.level, DNS=system.provisioning.gtm.level, AFM=system.provisioning.afm.level, APM=system.provisioning.apm.level, ASM=system.provisioning.asm.level, AVR=system.provisioning.avr.level\n| sort timestamp desc\n| dedup Hostname\n",
+            "visualization": "table",
+            "visualizationSettings": {
+                "autoSelectVisualization": false,
+                "table": {
+                    "hiddenColumns": [
+                        [
+                            "timestamp"
+                        ]
+                    ],
+                    "sortBy": [
+                        {
+                            "columnId": "[\"system.licenseready\"]",
+                            "direction": "ascending"
+                        }
+                    ]
+                }
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
+        },
+        "1": {
+            "title": "CPU Utilization",
+            "description": "BIG-IP system CPU utilization overtime by BIG-IP host",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| maketimeseries avg(todouble(system.cpu)), by: system.hostname",
+            "visualization": "lineChart",
+            "visualizationSettings": {
+                "chartSettings": {
+                    "leftYAxisSettings": {
+                        "label": "System CPU (%)",
+                        "isLabelVisible": true
+                    },
+                    "xAxisIsLabelVisible": true,
+                    "gapPolicy": "connect"
+                },
+                "autoSelectVisualization": false
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
+        },
+        "2": {
+            "title": "Memory Utilization",
+            "description": "BIG-IP system Memory utilization overtime by BIG-IP host",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| maketimeseries avg(todouble(system.memory)), by: system.hostname",
+            "visualization": "lineChart",
+            "visualizationSettings": {
+                "chartSettings": {
+                    "leftYAxisSettings": {
+                        "label": "System Memory (%)",
+                        "isLabelVisible": true
+                    },
+                    "xAxisIsLabelVisible": true,
+                    "gapPolicy": "connect",
+                    "pointsDisplay": "never"
+                },
+                "autoSelectVisualization": false
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            },
+            "segments": {
+                "tileSegments": [],
+                "tileSegmentsEnabled": false
+            }
+        },
+        "4": {
+            "title": "LTM Request Log Entries",
+            "type": "data",
+            "query": "    fetch logs\n    | filter telemetryEventCategory == \"LTM\"\n    | filter hostname == $BIGIP_Host\n    | filter event_source == \"response_logging\"\n    | fields event_timestamp, hostname, virtual_name, client_ip, http_url, http_method, http_status, response_ms",
+            "visualization": "table",
+            "visualizationSettings": {
+                "autoSelectVisualization": true,
+                "table": {
+                    "columnTypeOverrides": [
+                        {
+                            "fields": [
+                                "content"
+                            ],
+                            "id": 1759189028563,
+                            "value": "log-content"
+                        }
+                    ],
+                    "columnOrder": [
+                        "[\"http_method\"]",
+                        "[\"virtual_name\"]",
+                        "[\"client_ip\"]",
+                        "[\"hostname\"]",
+                        "[\"event_timestamp\"]",
+                        "[\"http_url\"]",
+                        "[\"http_status\"]",
+                        "[\"response_ms\"]"
+                    ]
+                }
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
+        },
+        "6": {
+            "title": "Throughput Bytes In/Out",
+            "description": "Throughput, (bytes in/out) by host",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| maketimeseries avg(todouble(system.throughputPerformance.outBits.current)/8), by: system.hostname\n| append [\n  fetch logs\n  | filter system.hostname == $BIGIP_Host\n  | maketimeseries avg(todouble(system.throughputPerformance.inBits.current)/8), by: system.hostname\n]\n",
+            "visualization": "lineChart",
+            "visualizationSettings": {
+                "chartSettings": {
+                    "leftYAxisSettings": {
+                        "label": "System CPU (%)",
+                        "isLabelVisible": true
+                    },
+                    "xAxisIsLabelVisible": true,
+                    "gapPolicy": "connect",
+                    "legend": {
+                        "hidden": true
+                    }
+                },
+                "autoSelectVisualization": false,
+                "unitsOverrides": [
+                    {
+                        "identifier": "avg(toDouble(system.throughputPerformance.outBits.current) / 8)",
+                        "unitCategory": "unspecified",
+                        "baseUnit": "none",
+                        "displayUnit": null,
+                        "decimals": null,
+                        "suffix": "",
+                        "delimiter": false,
+                        "added": 1762818284272
+                    }
+                ]
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
+        },
+        "7": {
+            "title": "Client Connections",
+            "description": "BIG-IP system CPU utilization overtime by BIG-IP host",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| maketimeseries avg(todouble(system.connectionsPerformance.clientConnections.current)), by: system.hostname\n",
+            "visualization": "lineChart",
+            "visualizationSettings": {
+                "chartSettings": {
+                    "leftYAxisSettings": {
+                        "label": "System CPU (%)",
+                        "isLabelVisible": true
+                    },
+                    "xAxisIsLabelVisible": true,
+                    "gapPolicy": "connect"
+                },
+                "autoSelectVisualization": false
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
+        }
+    },
+    "layouts": {
+        "0": {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 3
+        },
+        "1": {
+            "x": 0,
+            "y": 3,
+            "w": 8,
+            "h": 5
+        },
+        "2": {
+            "x": 8,
+            "y": 3,
+            "w": 8,
+            "h": 5
+        },
+        "4": {
+            "x": 0,
+            "y": 13,
+            "w": 16,
+            "h": 6
+        },
+        "6": {
+            "x": 8,
+            "y": 8,
+            "w": 8,
+            "h": 5
+        },
+        "7": {
+            "x": 0,
+            "y": 8,
+            "w": 8,
+            "h": 5
+        }
+    },
+    "importedWithCode": false,
+    "settings": {}
+}

@@ -1,0 +1,81 @@
+{
+    "class": "Telemetry",
+    "controls": {
+        "class": "Controls",
+        "logLevel": "debug",
+        "debug": true
+    },
+    "My_System": {
+        "class": "Telemetry_System",
+        "trace": false,
+        "systemPoller": {
+            "interval": 60,
+            "actions": [
+                {
+                    "includeData": {},
+                    "locations": {
+                        "system": true,
+                        "telemetryEventCategory": true,
+                        "virtualServers": {
+                            ".*": {
+                                "name": true,
+                                "pool": true,
+                                "availabilityState": true,
+                                "clientside.curConns": true,
+                                "clientside.pktsIn": true,
+                                "clientside.pktsOut": true
+                            }
+                        },
+                        "pools": {
+                            ".*": {
+                                "name": true,
+                                "members": {
+                                    ".*": {
+                                        "addr": true,
+                                        "monitorStatus": true,
+                                        "availabilityState": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "excludeData": {},
+                    "locations": {
+                        "virtualServers": {
+                            "telemetry": true
+                        },
+                        "pools": {
+                            "telemetry": true
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "My_Listener": {
+        "class": "Telemetry_Listener",
+        "trace": true,
+        "port": 6514
+    },
+    "dyntraceConsumer": {
+        "class": "Telemetry_Consumer",
+        "trace": true,
+        "protocol": "https",
+        "type": "Generic_HTTP",
+        "compressionType": "gzip",
+        "host": "shm91529.live.dynatrace.com",
+        "path": "/api/v2/logs/ingest",
+        "headers": [
+            {
+                "name": "content-type",
+                "value": "application/json"
+            },
+            {
+                "name": "Authorization",
+                "value": "Api-Token XXXXXXXXXXXXXXXXXX"
+            }
+        ]
+    }
+}

@@ -65,7 +65,7 @@
         "protocol": "https",
         "type": "Generic_HTTP",
         "compressionType": "gzip",
-        "host": "shm91529.live.dynatrace.com",
+        "host": "<dynatrace account ID>.live.dynatrace.com",
         "path": "/api/v2/logs/ingest",
         "headers": [
             {

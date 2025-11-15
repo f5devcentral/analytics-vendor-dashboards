@@ -15,7 +15,7 @@
         "0": {
             "title": "BIG-IP Systems Overview",
             "type": "data",
-            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| filter isNotNull(system.hostname)\n| fields timestamp, system.hostname, system.licenseready, system.configready, system.marketingname, system.failoverstatus, system.provisioning.ltm.level, system.provisioning.gtm.level, system.provisioning.afm.level, system.provisioning.apm.level, system.provisioning.asm.level, system.provisioning.avr.level\n| fieldsRename Hostname=system.hostname, Licensed=system.licenseready, ConfigReady=system.configready, Model=system.marketingname, FailoverStatus=system.failoverstatus, LTM=system.provisioning.ltm.level, DNS=system.provisioning.gtm.level, AFM=system.provisioning.afm.level, APM=system.provisioning.apm.level, ASM=system.provisioning.asm.level, AVR=system.provisioning.avr.level\n| sort timestamp desc\n| dedup Hostname\n",
+            "query": "fetch logs\n| filter isNotNull(system.hostname)\n| fields timestamp, Hostname =system.hostname, Licensed=system.licenseReady, Config_Ready= system.configReady, ASM_Policy = system.asmState, Model=system.marketingName, Failover_Status=system.failoverStatus, LTM=system.provisioning.ltm.level, DNS=system.provisioning.gtm.level, AFM=system.provisioning.afm.level, APM=system.provisioning.apm.level, ASM=system.provisioning.asm.level, AVR=system.provisioning.avr.level\n| sort timestamp desc\n| dedup Hostname\n",
             "visualization": "table",
             "visualizationSettings": {
                 "autoSelectVisualization": false,
@@ -29,6 +29,15 @@
                         {
                             "columnId": "[\"system.licenseready\"]",
                             "direction": "ascending"
+                        }
+                    ],
+                    "columnTypeOverrides": [
+                        {
+                            "fields": [
+                                "content"
+                            ],
+                            "id": 1763086169886,
+                            "value": "log-content"
                         }
                     ]
                 }
@@ -233,6 +242,196 @@
                     "isAvailable": true
                 }
             }
+        },
+        "8": {
+            "title": "CPU Utilization",
+            "description": "BIG-IP system CPU utilization overtime by BIG-IP host",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| fields system.cpu, timestamp  \n| sort timestamp desc // Sort by timestamp, newest first\n| limit 1 // Only return the most recent data point",
+            "visualization": "singleValue",
+            "visualizationSettings": {
+                "autoSelectVisualization": false,
+                "chartSettings": {
+                    "leftYAxisSettings": {
+                        "label": "System CPU (%)",
+                        "isLabelVisible": true
+                    },
+                    "xAxisIsLabelVisible": true,
+                    "gapPolicy": "connect"
+                },
+                "singleValue": {
+                    "labelMode": "none",
+                    "label": "system.cpu"
+                },
+                "unitsOverrides": [
+                    {
+                        "identifier": "system.cpu",
+                        "unitCategory": "percentage",
+                        "baseUnit": "percent",
+                        "displayUnit": null,
+                        "decimals": null,
+                        "suffix": "",
+                        "delimiter": false,
+                        "added": 1763168559136
+                    }
+                ]
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
+        },
+        "9": {
+            "title": "Memory Utilization",
+            "description": "BIG-IP system CPU utilization overtime by BIG-IP host",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| fields system.memory, timestamp  \n| sort timestamp desc // Sort by timestamp, newest first\n| limit 1 // Only return the most recent data point",
+            "visualization": "singleValue",
+            "visualizationSettings": {
+                "autoSelectVisualization": false,
+                "chartSettings": {
+                    "leftYAxisSettings": {
+                        "label": "System CPU (%)",
+                        "isLabelVisible": true
+                    },
+                    "xAxisIsLabelVisible": true,
+                    "gapPolicy": "connect"
+                },
+                "singleValue": {
+                    "labelMode": "none",
+                    "label": "system.cpu",
+                    "colorThresholdTarget": "background"
+                },
+                "unitsOverrides": [
+                    {
+                        "identifier": "system.memory",
+                        "unitCategory": "percentage",
+                        "baseUnit": "percent",
+                        "displayUnit": null,
+                        "decimals": null,
+                        "suffix": "",
+                        "delimiter": false,
+                        "added": 1763168559136
+                    }
+                ]
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
+        },
+        "10": {
+            "title": "TMM CPU Utilization",
+            "description": "BIG-IP system CPU utilization overtime by BIG-IP host",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| fields system.tmmCpu, timestamp  \n| sort timestamp desc // Sort by timestamp, newest first\n| limit 1 // Only return the most recent data point",
+            "visualization": "singleValue",
+            "visualizationSettings": {
+                "autoSelectVisualization": false,
+                "chartSettings": {
+                    "leftYAxisSettings": {
+                        "label": "System CPU (%)",
+                        "isLabelVisible": true
+                    },
+                    "xAxisIsLabelVisible": true,
+                    "gapPolicy": "connect"
+                },
+                "singleValue": {
+                    "labelMode": "none",
+                    "label": "system.cpu"
+                },
+                "unitsOverrides": [
+                    {
+                        "identifier": "system.tmmCpu",
+                        "unitCategory": "percentage",
+                        "baseUnit": "percent",
+                        "displayUnit": null,
+                        "decimals": null,
+                        "suffix": "",
+                        "delimiter": false,
+                        "added": 1763168559136
+                    }
+                ]
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
+        },
+        "11": {
+            "title": "TMM Memory Utilization",
+            "description": "BIG-IP system CPU utilization overtime by BIG-IP host",
+            "type": "data",
+            "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| fields system.tmmMemory, timestamp  \n| sort timestamp desc // Sort by timestamp, newest first\n| limit 1 // Only return the most recent data point",
+            "visualization": "singleValue",
+            "visualizationSettings": {
+                "autoSelectVisualization": false,
+                "chartSettings": {
+                    "leftYAxisSettings": {
+                        "label": "System CPU (%)",
+                        "isLabelVisible": true
+                    },
+                    "xAxisIsLabelVisible": true,
+                    "gapPolicy": "connect"
+                },
+                "singleValue": {
+                    "labelMode": "none",
+                    "label": "system.cpu",
+                    "colorThresholdTarget": "background"
+                },
+                "unitsOverrides": [
+                    {
+                        "identifier": "system.tmmMemory",
+                        "unitCategory": "percentage",
+                        "baseUnit": "percent",
+                        "displayUnit": null,
+                        "decimals": null,
+                        "suffix": "",
+                        "delimiter": false,
+                        "added": 1763168559136
+                    }
+                ]
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 1,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            },
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            }
         }
     },
     "layouts": {
@@ -244,33 +443,57 @@
         },
         "1": {
             "x": 0,
-            "y": 3,
+            "y": 6,
             "w": 8,
             "h": 5
         },
         "2": {
             "x": 8,
-            "y": 3,
+            "y": 6,
             "w": 8,
             "h": 5
         },
         "4": {
             "x": 0,
-            "y": 13,
+            "y": 16,
             "w": 16,
             "h": 6
         },
         "6": {
             "x": 8,
-            "y": 8,
+            "y": 11,
             "w": 8,
             "h": 5
         },
         "7": {
             "x": 0,
-            "y": 8,
+            "y": 11,
             "w": 8,
             "h": 5
+        },
+        "8": {
+            "x": 0,
+            "y": 3,
+            "w": 4,
+            "h": 3
+        },
+        "9": {
+            "x": 8,
+            "y": 3,
+            "w": 4,
+            "h": 3
+        },
+        "10": {
+            "x": 4,
+            "y": 3,
+            "w": 4,
+            "h": 3
+        },
+        "11": {
+            "x": 12,
+            "y": 3,
+            "w": 4,
+            "h": 3
         }
     },
     "importedWithCode": false,

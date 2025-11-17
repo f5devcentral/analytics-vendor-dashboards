@@ -2,10 +2,10 @@
     "version": 20,
     "variables": [
         {
-            "version": 2,
             "key": "BIGIP_Host",
-            "type": "query",
             "visible": true,
+            "type": "query",
+            "version": 2,
             "editable": true,
             "input": "fetch logs\n| fields system.hostname, telemetryeventcategory\n| filterout isNull(system.hostname)\n| summarize distincthosts = collectDistinct(system.hostname)\n| expand distincthosts\n| sort distincthosts",
             "multiple": false
@@ -15,7 +15,7 @@
         "0": {
             "title": "BIG-IP Systems Overview",
             "type": "data",
-            "query": "fetch logs\n| filter isNotNull(system.hostname)\n| fields timestamp, Hostname =system.hostname, Licensed=system.licenseReady, Config_Ready= system.configReady, ASM_Policy = system.asmState, Model=system.marketingName, Failover_Status=system.failoverStatus, LTM=system.provisioning.ltm.level, DNS=system.provisioning.gtm.level, AFM=system.provisioning.afm.level, APM=system.provisioning.apm.level, ASM=system.provisioning.asm.level, AVR=system.provisioning.avr.level\n| sort timestamp desc\n| dedup Hostname\n",
+            "query": "fetch logs\n| filter isNotNull(system.hostname)\n| filter system.hostname == $BIGIP_Host\n| fields timestamp, Hostname =system.hostname, Licensed=system.licenseReady, Config_Ready= system.configReady, ASM_Policy = system.asmState, Model=system.marketingName, Failover_Status=system.failoverStatus, LTM=system.provisioning.ltm.level, DNS=system.provisioning.gtm.level, AFM=system.provisioning.afm.level, APM=system.provisioning.apm.level, ASM=system.provisioning.asm.level, AVR=system.provisioning.avr.level\n| sort timestamp desc\n| dedup Hostname\n",
             "visualization": "table",
             "visualizationSettings": {
                 "autoSelectVisualization": false,
@@ -250,19 +250,11 @@
             "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| fields system.cpu, timestamp  \n| sort timestamp desc // Sort by timestamp, newest first\n| limit 1 // Only return the most recent data point",
             "visualization": "singleValue",
             "visualizationSettings": {
-                "autoSelectVisualization": false,
-                "chartSettings": {
-                    "leftYAxisSettings": {
-                        "label": "System CPU (%)",
-                        "isLabelVisible": true
-                    },
-                    "xAxisIsLabelVisible": true,
-                    "gapPolicy": "connect"
-                },
                 "singleValue": {
                     "labelMode": "none",
                     "label": "system.cpu"
                 },
+                "autoSelectVisualization": false,
                 "unitsOverrides": [
                     {
                         "identifier": "system.cpu",
@@ -297,20 +289,12 @@
             "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| fields system.memory, timestamp  \n| sort timestamp desc // Sort by timestamp, newest first\n| limit 1 // Only return the most recent data point",
             "visualization": "singleValue",
             "visualizationSettings": {
-                "autoSelectVisualization": false,
-                "chartSettings": {
-                    "leftYAxisSettings": {
-                        "label": "System CPU (%)",
-                        "isLabelVisible": true
-                    },
-                    "xAxisIsLabelVisible": true,
-                    "gapPolicy": "connect"
-                },
                 "singleValue": {
                     "labelMode": "none",
                     "label": "system.cpu",
                     "colorThresholdTarget": "background"
                 },
+                "autoSelectVisualization": false,
                 "unitsOverrides": [
                     {
                         "identifier": "system.memory",
@@ -345,19 +329,11 @@
             "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| fields system.tmmCpu, timestamp  \n| sort timestamp desc // Sort by timestamp, newest first\n| limit 1 // Only return the most recent data point",
             "visualization": "singleValue",
             "visualizationSettings": {
-                "autoSelectVisualization": false,
-                "chartSettings": {
-                    "leftYAxisSettings": {
-                        "label": "System CPU (%)",
-                        "isLabelVisible": true
-                    },
-                    "xAxisIsLabelVisible": true,
-                    "gapPolicy": "connect"
-                },
                 "singleValue": {
                     "labelMode": "none",
                     "label": "system.cpu"
                 },
+                "autoSelectVisualization": false,
                 "unitsOverrides": [
                     {
                         "identifier": "system.tmmCpu",
@@ -392,20 +368,12 @@
             "query": "fetch logs\n| filter system.hostname == $BIGIP_Host\n| fields system.tmmMemory, timestamp  \n| sort timestamp desc // Sort by timestamp, newest first\n| limit 1 // Only return the most recent data point",
             "visualization": "singleValue",
             "visualizationSettings": {
-                "autoSelectVisualization": false,
-                "chartSettings": {
-                    "leftYAxisSettings": {
-                        "label": "System CPU (%)",
-                        "isLabelVisible": true
-                    },
-                    "xAxisIsLabelVisible": true,
-                    "gapPolicy": "connect"
-                },
                 "singleValue": {
                     "labelMode": "none",
                     "label": "system.cpu",
                     "colorThresholdTarget": "background"
                 },
+                "autoSelectVisualization": false,
                 "unitsOverrides": [
                     {
                         "identifier": "system.tmmMemory",
